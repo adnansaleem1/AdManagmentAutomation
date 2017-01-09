@@ -1,0 +1,4 @@
+c:\users\adnan.saleem\documents\visual studio 2013\Projects\AdManagementT-Automation\AddManagmentData\bin\Debug\AddManagmentData.dll
+c:\users\adnan.saleem\documents\visual studio 2013\Projects\AdManagementT-Automation\AddManagmentData\bin\Debug\AddManagmentData.pdb
+c:\users\adnan.saleem\documents\visual studio 2013\Projects\AdManagementT-Automation\AddManagmentData\obj\Debug\AddManagmentData.dll
+c:\users\adnan.saleem\documents\visual studio 2013\Projects\AdManagementT-Automation\AddManagmentData\obj\Debug\AddManagmentData.pdb
