@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SeleniumExtension.Driver;
+using SeleniumExtension.Utilties;
 
 namespace AdManagementT_Automation.Controls
 {
@@ -25,11 +26,13 @@ namespace AdManagementT_Automation.Controls
 
             }
             else if (MainTab == AM_MainTab.Advertisments) {
-
+                driver.FindElement(By.LinkText("Advertisements")).Click();
+                Wait.UntilDisply(By.Id("drpYear"));
             }
             else if (MainTab == AM_MainTab.Invetory)
             {
-
+                driver.FindElement(By.LinkText("Insertion Orders")).Click();
+                Wait.AM_Loaging_ShowAndHide();
             }
             else if (MainTab == AM_MainTab.Proposals)
             {

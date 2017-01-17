@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using SeleniumExtension.Driver;
 using AdManagementT_Automation.Controls;
+using AdManagementT_Automation.Pages.Insertion_Orders;
+using AdManagementT_Automation.Pages.Adevertisements;
 
 namespace AdManagementT_Automation.Base
 {
@@ -21,6 +23,15 @@ namespace AdManagementT_Automation.Base
 
         public static LoginPage LoginP { get { return PagesRepo.GetPage<LoginPage>(); } }
         public static AM_Tabs AddTabs { get { return PagesRepo.GetPage<AM_Tabs>(); } }
+        public static AllOrdersPage AllOrders { get { return PagesRepo.GetPage<AllOrdersPage>(); } }
+        public static EditOrderPage EditOrder { get { return PagesRepo.GetPage<EditOrderPage>(); } }
+        public static EditOrderLinePage EditOrderLine { get { return PagesRepo.GetPage<EditOrderLinePage>(); } }
+        public static AdvertisementPage Advertisement { get { return PagesRepo.GetPage<AdvertisementPage>(); } }
+
+        
+
+        
+        
 
         
     }

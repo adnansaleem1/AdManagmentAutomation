@@ -18,8 +18,9 @@ namespace AdManagementT_Automation
         private LoginPage LoginPageManager = null;
 
 
+        #region Order Line Test Cases
 
-        [Test,Order(0)]
+        [Test, Order(0)]
         public void LogInToAddManagement()
         {
             LoginPageManager = PagesRepo.LoginP;
@@ -29,10 +30,42 @@ namespace AdManagementT_Automation
                 .GoToAppCatagory("ESP");
         }
         [Test, Order(1)]
-        public void AddNewOrderLine() { 
-        
+        public void AddPFPOrderLine_SaveAndCopy()
+        {
+            this.LogInToAddManagement();
+            var AllOrders = PagesRepo.AllOrders;
+            AllOrders.Navigate()
+            .SelectGivenOrderByID(OrderLineData.OrderId);
+            PagesRepo.EditOrder.AddNewOrderLine("PFP");
+            PagesRepo.EditOrderLine.
+                FillOrderLine(OrderLineData.SaveAndCopy).
+                SaveAndCopy().VerifySaveAndCopy();
         }
-
+        [Test, Order(2)]
+        public void AddPFPOrderLine_SaveAndAdd()
+        {
+            this.LogInToAddManagement();
+            var AllOrders = PagesRepo.AllOrders;
+            AllOrders.Navigate()
+            .SelectGivenOrderByID(OrderLineData.OrderId);
+            PagesRepo.EditOrder.AddNewOrderLine("PFP");
+            PagesRepo.EditOrderLine.
+            FillOrderLine(OrderLineData.SaveAndAdd)
+            .VerfiyMultipleProducts(3);
+        }
+         [Test, Order(3)]
+        public void AddPFPOrderLine_Add3ProdcutsManually()
+        {
+            this.LogInToAddManagement();
+            var AllOrders = PagesRepo.AllOrders;
+            AllOrders.Navigate()
+            .SelectGivenOrderByID(OrderLineData.OrderId);
+            PagesRepo.EditOrder.AddNewOrderLine("PFP");
+            PagesRepo.EditOrderLine.
+            FillOrderLine(OrderLineData.MultipleProductInManualSelection)
+            .VerfiyMultipleProducts(3);
+        } 
+        #endregion
 
         #region Setup Section
         [OneTimeSetUp]
@@ -40,6 +73,7 @@ namespace AdManagementT_Automation
         {
             SDriver.StartBrowser(BrowserTypes.Chrome);
             driver = SDriver.Browser;
+            driver.Manage().Window.Maximize();
         }
         [OneTimeTearDown]
         public void OneTimeTearDown()

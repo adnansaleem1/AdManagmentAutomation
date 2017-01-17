@@ -7,4 +7,6 @@ using System.Threading.Tasks;
 namespace SeleniumExtension.Ref
 {
     public enum BrowserTypes { Firefox, InternetExplorer, Chrome }
+    public enum LogingType { NoResult,Error, Exception, TextCaseFail,TestCasePass,Success,Warning,Information}
+
 }

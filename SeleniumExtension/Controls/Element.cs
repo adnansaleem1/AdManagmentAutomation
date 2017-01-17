@@ -1,5 +1,7 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 using SeleniumExtension.Driver;
+using SeleniumExtension.Utilties;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,16 +10,118 @@ using System.Threading.Tasks;
 
 namespace SeleniumExtension.Controls
 {
-    class Element
+    public class Element
     {
 
-        internal static bool Dispaly(By by)
+        public static bool Dispaly(By by)
         {
 
             IWebDriver driver = SDriver.Browser;
             try
             {
                 IWebElement ellemnt = driver.FindElement(by);
+                if (ellemnt.Displayed)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+
+            }
+        }
+        public static void ScrolTo(By by)
+        {
+
+            try
+            {
+                IWebDriver driver = SDriver.Browser;
+                IWebElement element = driver.FindElement(by);
+                //  ((IJavaScriptExecutor)driver).ExecuteScript("window.scrollTo(" + x + "," + y + ");");
+
+                Actions actions = new Actions(driver);
+                actions.MoveToElement(element);
+                //actions.click();
+                actions.Perform();
+                Wait.Second(1);
+            }
+            catch (Exception)
+            {
+
+                //throw;
+            }
+        }
+        public static void ScrolTo(IWebElement ele)
+        {
+
+            try
+            {
+                IWebDriver driver = SDriver.Browser;
+                //IWebElement element = driver.FindElement(by);
+                //  ((IJavaScriptExecutor)driver).ExecuteScript("window.scrollTo(" + x + "," + y + ");");
+
+                Actions actions = new Actions(driver);
+                actions.MoveToElement(ele);
+                //actions.click();
+                actions.Perform();
+                Wait.Second(1);
+            }
+            catch (Exception)
+            {
+
+                //throw;
+            }
+        }
+
+        public static IWebElement GetByValueFromList(IList<IWebElement> eList, string p)
+        {
+            return eList.FirstOrDefault(e => e.GetAttribute("Value") == p);
+        }
+
+        public static void syncCheckBox(bool p, IWebElement IncludeSubCatInput)
+        {
+            if (IncludeSubCatInput.Selected != p) {
+                IncludeSubCatInput.Click();
+            }
+        }
+
+        internal static By Dispaly(IList<By> elelist)
+        {
+            IWebDriver driver = SDriver.Browser;
+            foreach (var item in elelist)
+            {
+                try
+                {
+                    IWebElement ellemnt = driver.FindElement(item);
+                    if (ellemnt.Displayed)
+                    {
+                        return item;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+                catch (Exception ex)
+                {
+                   // return null;
+
+                } 
+            }
+            return null;
+        }
+
+        internal static bool Dispaly(IWebElement ele)
+        {
+            //IWebDriver driver = SDriver.Browser;
+            try
+            {
+                IWebElement ellemnt = ele;
                 if (ellemnt.Displayed)
                 {
                     return true;

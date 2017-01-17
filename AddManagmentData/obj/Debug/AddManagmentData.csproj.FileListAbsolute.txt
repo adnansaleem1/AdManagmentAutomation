@@ -2,3 +2,4 @@ c:\users\adnan.saleem\documents\visual studio 2013\Projects\AdManagementT-Automa
 c:\users\adnan.saleem\documents\visual studio 2013\Projects\AdManagementT-Automation\AddManagmentData\bin\Debug\AddManagmentData.pdb
 c:\users\adnan.saleem\documents\visual studio 2013\Projects\AdManagementT-Automation\AddManagmentData\obj\Debug\AddManagmentData.dll
 c:\users\adnan.saleem\documents\visual studio 2013\Projects\AdManagementT-Automation\AddManagmentData\obj\Debug\AddManagmentData.pdb
+C:\Users\adnan.saleem\Documents\Visual Studio 2013\Projects\AdManagementT-Automation\AddManagmentData\obj\Debug\AddManagmentData.csprojResolveAssemblyReference.cache

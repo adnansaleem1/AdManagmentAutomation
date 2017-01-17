@@ -1,3 +1,4 @@
+C:\Users\adnan.saleem\Documents\Visual Studio 2013\Projects\AdManagementT-Automation\AdManagementT-Automation\obj\Debug\AdManagementT-Automation.csprojResolveAssemblyReference.cache
 C:\Users\adnan.saleem\Documents\Visual Studio 2013\Projects\AdManagementT-Automation\AdManagementT-Automation\bin\Debug\AdManagementT-Automation.dll
 C:\Users\adnan.saleem\Documents\Visual Studio 2013\Projects\AdManagementT-Automation\AdManagementT-Automation\bin\Debug\AdManagementT-Automation.pdb
 C:\Users\adnan.saleem\Documents\Visual Studio 2013\Projects\AdManagementT-Automation\AdManagementT-Automation\bin\Debug\AddManagmentData.dll
@@ -14,6 +15,5 @@ C:\Users\adnan.saleem\Documents\Visual Studio 2013\Projects\AdManagementT-Automa
 C:\Users\adnan.saleem\Documents\Visual Studio 2013\Projects\AdManagementT-Automation\AdManagementT-Automation\bin\Debug\ThoughtWorks.Selenium.Core.xml
 C:\Users\adnan.saleem\Documents\Visual Studio 2013\Projects\AdManagementT-Automation\AdManagementT-Automation\bin\Debug\WebDriver.xml
 C:\Users\adnan.saleem\Documents\Visual Studio 2013\Projects\AdManagementT-Automation\AdManagementT-Automation\bin\Debug\WebDriver.Support.xml
-C:\Users\adnan.saleem\Documents\Visual Studio 2013\Projects\AdManagementT-Automation\AdManagementT-Automation\obj\Debug\AdManagementT-Automation.csprojResolveAssemblyReference.cache
 C:\Users\adnan.saleem\Documents\Visual Studio 2013\Projects\AdManagementT-Automation\AdManagementT-Automation\obj\Debug\AdManagementT-Automation.dll
 C:\Users\adnan.saleem\Documents\Visual Studio 2013\Projects\AdManagementT-Automation\AdManagementT-Automation\obj\Debug\AdManagementT-Automation.pdb

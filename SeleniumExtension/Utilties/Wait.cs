@@ -42,7 +42,7 @@ namespace SeleniumExtension.Utilties
            Wait.UntilHide(Loading);
         }
 
-        private static void UntilHide(By by)
+        public static void UntilHide(By by)
         {
             int MaxWaited = 30;
             int TimeToCalculate = 0;
@@ -52,7 +52,7 @@ namespace SeleniumExtension.Utilties
             {
                 // driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(Config.LoopTimeOutToCheckElement));
                 Thread.Sleep(loopWaitTime * 1000);
-                MaxWaited +=loopWaitTime;
+                TimeToCalculate += loopWaitTime;
                 if (MaxWaited <= TimeToCalculate)
                 {
                     break;
@@ -61,23 +61,70 @@ namespace SeleniumExtension.Utilties
             }
         }
 
-        private static void UntilDisply(By by)
+        public static void UntilDisply(By by)
         {
             int MaxWaited = 30;
             int TimeToCalculate = 0;
             int loopWaitTime = 1;
             IWebDriver driver = SDriver.Browser;
-            while (Element.Dispaly(by))
+            while (!Element.Dispaly(by))
             {
                 // driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(Config.LoopTimeOutToCheckElement));
                 Thread.Sleep(loopWaitTime * 500);
-                MaxWaited += loopWaitTime;
+                TimeToCalculate += loopWaitTime;
                 if (MaxWaited <= TimeToCalculate)
                 {
                     break;
                     throw new Exception("Max Wait Reached for Element Search Wait");
                 }
             }
+        }
+        public static void UntilDisply(IWebElement ele)
+        {
+            int MaxWaited = 30;
+            int TimeToCalculate = 0;
+            int loopWaitTime = 1;
+            IWebDriver driver = SDriver.Browser;
+            while (!Element.Dispaly(ele))
+            {
+                // driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(Config.LoopTimeOutToCheckElement));
+                Thread.Sleep(loopWaitTime * 500);
+                TimeToCalculate += loopWaitTime;
+                if (MaxWaited <= TimeToCalculate)
+                {
+                    break;
+                    throw new Exception("Max Wait Reached for Element Search Wait");
+                }
+            }
+        }
+
+        public static void MLSeconds(int p)
+        {
+            Thread.Sleep(p);
+        }
+
+        public static By UntilDisply(IList<By> elelist)
+        {
+           
+        
+            int MaxWaited = 30;
+            int TimeToCalculate = 0;
+            int loopWaitTime = 1;
+            IWebDriver driver = SDriver.Browser;
+            By ResultBy = Element.Dispaly(elelist);
+            while (ResultBy == null)
+            {
+                // driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(Config.LoopTimeOutToCheckElement));
+                Thread.Sleep(loopWaitTime * 500);
+                TimeToCalculate += loopWaitTime;
+                if (MaxWaited <= TimeToCalculate)
+                {
+                    break;
+                    throw new Exception("Max Wait Reached for Element Search Wait");
+                }
+                ResultBy = Element.Dispaly(elelist);
+            }
+            return ResultBy;
         }
     }
 }

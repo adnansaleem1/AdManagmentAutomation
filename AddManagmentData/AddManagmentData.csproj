@@ -42,7 +42,10 @@
     <Compile Include="Class1.cs" />
     <Compile Include="Common\AMUrls.cs" />
     <Compile Include="Data\AddUsers.cs" />
+    <Compile Include="Data\OrderLineData.cs" />
     <Compile Include="Model\AddUser.cs" />
+    <Compile Include="Model\AdvertisementSearchModel.cs" />
+    <Compile Include="Model\OrderLineModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

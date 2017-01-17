@@ -68,6 +68,12 @@
   <ItemGroup>
     <Compile Include="Base\PagesRepo.cs" />
     <Compile Include="Controls\AM_Tabs.cs" />
+    <Compile Include="Pages\Adevertisements\AdvertisementPage.cs" />
+    <Compile Include="Pages\Admin\PagesPage.cs" />
+    <Compile Include="Pages\Insertion Orders\AllOrders.cs" />
+    <Compile Include="Pages\Insertion Orders\CreateOrder.cs" />
+    <Compile Include="Pages\Insertion Orders\EditOrder.cs" />
+    <Compile Include="Pages\Insertion Orders\EditOrderLine.cs" />
     <Compile Include="Pages\LoginPage.cs" />
     <Compile Include="AddManagmentTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
