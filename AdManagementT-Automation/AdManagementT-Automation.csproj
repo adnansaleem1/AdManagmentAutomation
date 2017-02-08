@@ -74,6 +74,8 @@
     <Compile Include="Pages\Insertion Orders\CreateOrder.cs" />
     <Compile Include="Pages\Insertion Orders\EditOrder.cs" />
     <Compile Include="Pages\Insertion Orders\EditOrderLine.cs" />
+    <Compile Include="Pages\Proposals\CreateProposalPage.cs" />
+    <Compile Include="Pages\Inventory\InventoryPage.cs" />
     <Compile Include="Pages\LoginPage.cs" />
     <Compile Include="AddManagmentTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -86,9 +88,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AddManagmentData\AddManagmentData.csproj">
+    <ProjectReference Include="..\AddManagmentData\AdManagementData.csproj">
       <Project>{bd80d18b-2101-48cb-bc23-94e57e3b2041}</Project>
-      <Name>AddManagmentData</Name>
+      <Name>AdManagementData</Name>
     </ProjectReference>
     <ProjectReference Include="..\SeleniumExtension\SeleniumExtension.csproj">
       <Project>{ebe14b95-15d8-48a2-b956-ad97cf6dad01}</Project>

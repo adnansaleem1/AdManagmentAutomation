@@ -39,16 +39,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
     <Compile Include="Common\AMUrls.cs" />
     <Compile Include="Data\AddUsers.cs" />
+    <Compile Include="Data\InventoryData.cs" />
     <Compile Include="Data\OrderLineData.cs" />
+    <Compile Include="Data\PagesData.cs" />
     <Compile Include="Model\AddUser.cs" />
+    <Compile Include="Model\Admin\PageModel.cs" />
     <Compile Include="Model\AdvertisementSearchModel.cs" />
+    <Compile Include="Model\CreateProposal.cs" />
+    <Compile Include="Model\InventoryModel.cs" />
     <Compile Include="Model\OrderLineModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\SeleniumExtension\SeleniumExtension.csproj">
+      <Project>{ebe14b95-15d8-48a2-b956-ad97cf6dad01}</Project>
+      <Name>SeleniumExtension</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

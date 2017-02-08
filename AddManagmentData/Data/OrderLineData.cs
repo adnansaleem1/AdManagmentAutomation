@@ -84,6 +84,7 @@ namespace AddManagmentData.Data
                     SearchTerms = new List<string>() { "ENVIRONMENTALLY FRIENDLY PRODUCTS" },
                     IncludeSubCat = false,
                     Statuses = new List<string>() { "Active" },
+                    Rates = new List<string>() {"Supplier Rate Card" },
                 };
             }
         }

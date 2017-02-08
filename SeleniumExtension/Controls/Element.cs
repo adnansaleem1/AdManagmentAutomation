@@ -137,5 +137,15 @@ namespace SeleniumExtension.Controls
 
             }
         }
+
+        internal static IWebElement GetParent(IWebElement CategoryField)
+        {
+          return  CategoryField.FindElement(By.XPath(".."));
+        }
+
+        internal static IWebElement FindByTagAndTextInContainer(IWebElement dialog,string Text,string Tag)
+        {
+          return  dialog.FindElements(By.TagName(Tag)).First(e => e.Text == Text);
+        }
     }
 }

@@ -55,7 +55,12 @@ namespace SeleniumExtension.Driver
                 SDriver.Browser = new InternetExplorerDriver();
                 break;
             case BrowserTypes.Chrome:
-                SDriver.Browser = new ChromeDriver();
+                var chromeOptions = new ChromeOptions();
+                chromeOptions.AddUserProfilePreference("download.default_directory", Config.DefaultFileDownloadPath);
+                chromeOptions.AddUserProfilePreference("intl.accept_languages", "nl");
+                chromeOptions.AddUserProfilePreference("disable-popup-blocking", "true");
+                chromeOptions.AddUserProfilePreference("Proxy", "");
+                SDriver.Browser = new ChromeDriver(chromeOptions);
                 break;
             default:
                 break;

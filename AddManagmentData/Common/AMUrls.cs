@@ -8,6 +8,6 @@ namespace AddManagmentData.Common
 {
     public static class AMUrls
     {
-        public  const string BaseUrl = "http://stage-admanagement.asicentral.com/";
+        public const string BaseUrl = "http://stage-admanagement.asicentral.com/";
     }
 }

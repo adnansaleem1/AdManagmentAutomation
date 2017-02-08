@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdManagementT-Automation", "AdManagementT-Automation\AdManagementT-Automation.csproj", "{342932FA-3D27-403E-AF77-C931FCB5D46D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeleniumExtension", "SeleniumExtension\SeleniumExtension.csproj", "{EBE14B95-15D8-48A2-B956-AD97CF6DAD01}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AddManagmentData", "AddManagmentData\AddManagmentData.csproj", "{BD80D18B-2101-48CB-BC23-94E57E3B2041}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdManagementData", "AddManagmentData\AdManagementData.csproj", "{BD80D18B-2101-48CB-BC23-94E57E3B2041}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{89A2EB15-1654-42EE-A28C-6F1E9FACD838}"
 	ProjectSection(SolutionItems) = preProject

@@ -4,6 +4,8 @@ using AdManagementT_Automation.Ref;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
 using SeleniumExtension.Controls;
+using SeleniumExtension.Driver;
+using SeleniumExtension.Ref;
 using SeleniumExtension.Utilties;
 using System;
 using System.Collections.Generic;
@@ -13,8 +15,11 @@ using System.Threading.Tasks;
 
 namespace AdManagementT_Automation.Pages.Adevertisements
 {
-   public class AdvertisementPage
+    public class AdvertisementPage
     {
+
+        #region Elemets
+        IWebDriver driver = SDriver.Browser;
 
         [FindsBy(How = How.CssSelector, Using = "input[data-ng-model='filterMember.Name']")]
         private IWebElement MemberId { get; set; }
@@ -51,63 +56,28 @@ namespace AdManagementT_Automation.Pages.Adevertisements
 
         [FindsBy(How = How.CssSelector, Using = "table[ng-table='tableAdListParams']")]
         private IWebElement ResultGrid { get; set; }
+        
+        [FindsBy(How = How.CssSelector, Using = "button[data-ng-click='exportAds()']")]
+        private IWebElement DownloadAdsBtn { get; set; }
 
-        public AdvertisementPage Navigate() {
-            PagesRepo.AddTabs.Switch(AM_MainTab.Advertisments);
-            return this;
-        }
+        [FindsBy(How = How.CssSelector, Using = "button[class='btn btn-default dropdown-toggle ng-binding']")]
+        private IWebElement ChangeStatusDropDown { get; set; }
+        
+        
 
-        public AdvertisementPage FillSearchParamitters(AdvertisementSearchModel Data)
-        {
-            MemberId.SendKeys(Data.MemberID==null?"":Data.MemberID);
-            this.SelectFromMultipleControl(Data.Positions, PositionControl);
-            this.TagBasedInput(Data.SearchTerms, SearchTermsControl);
-            Element.syncCheckBox(Data.IncludeSubCat, IncludeSubCatInput);
-            this.SelectFromMultipleControl(Data.SalesReps, SalesRepsControl);
-            this.SelectFromMultipleControl(Data.Statuses, AdStatusControl);
-            Select.ByText( YearDD,Data.Year.ToString());
-            Select.ByText(MonthDD, Data.Month.ToString());
-            this.SelectFromMultipleControl(Data.Rates, RateControl);
-            FilterTextfield.SendKeys(Data.SearchField==null?"":Data.SearchField);
-            Searchbtn.Click();
-            Wait.AM_Loaging_ShowAndHide();
-            return this;
-        }
+
+        #endregion
 
 
 
-        private void SelectFromMultipleControl(IList<string> list, IWebElement Control)
-        {
-            try
-            {
+        #region Utilities
 
-                if (list.Count > 0)
-                {
-                    Element.ScrolTo(Control);
-                    Control.FindElement(By.ClassName("dropdown-toggle")).Click();
-                    Wait.MLSeconds(200);
-                    IWebElement ListItemele;
-                    foreach (var item in list)
-                    {
-                        ListItemele = Control.FindElement(By.LinkText(item.ToString()));
-                        Element.ScrolTo(ListItemele);
-                        ListItemele.Click();
-                        Wait.MLSeconds(100);
-                    }
-                    Control.FindElement(By.XPath("..")).Click();
-                }
-            }
-            catch (Exception)
-            {
-
-                //throw;
-            }
-        }
 
         private void TagBasedInput(IList<string> list, IWebElement Control)
         {
             Element.ScrolTo(Control);
-            foreach (var item in list) {
+            foreach (var item in list)
+            {
                 Control.FindElement(By.TagName("input")).SendKeys(item);
                 Wait.UntilDisply(By.ClassName("autocomplete"));
                 Control.FindElement(By.TagName("input")).SendKeys(Keys.Enter);
@@ -116,34 +86,235 @@ namespace AdManagementT_Automation.Pages.Adevertisements
 
         }
 
-        private void SelectFromMultipleControl(IList<int> list, IWebElement Control)
+      
+        private string FindMemberIdFromResultRow(IWebElement webElement)
         {
-            try
-            {
+            return webElement.FindElement(By.CssSelector("span[ng-bind-html='orderLine.AsiNumber | highlight:filterText']")).Text;
+        }
+        private IList<IWebElement> GetRowsOfGrid()
+        {
+            IList<IWebElement> Rows = ResultGrid.FindElements(By.CssSelector("tr[ng-repeat='orderLine in $data']"));
+            return Rows;
+        }
+        private int FindPositionFromResultRow(IWebElement webElement)
+        {
+            return Convert.ToInt16(webElement.FindElement(By.CssSelector("div[ng-bind-html='orderLine.Position.toString() | highlight:filterText']")).Text);
+        }
+        private string FindSearchTermsFromResultRow(IWebElement ele)
+        {
+            return ele.FindElement(By.CssSelector("div[ng-bind-html='orderLine.SearchTermPage | highlight:filterText']")).Text;
+        }
+        private string FindStatusFromResultRow(IWebElement ele)
+        {
+            return ele.FindElement(By.CssSelector("span[ng-bind-html='orderLine.Status | highlight:filterText']")).Text;
+        }
+        private AdvertisementPage Search()
+        {
+            Searchbtn.Click();
+            Wait.AM_Loaging_ShowAndHide();
+            return this;
+        }
+        public AdvertisementPage Navigate()
+        {
+            PagesRepo.AddTabs.Switch(AM_MainTab.Advertisments);
+            Wait.UntilDisply(MemberId);
+            return this;
+        }
+        private void FillEMemberID(string Data)
+        {
+            MemberId.SendKeys(Data == null ? "" : Data);
+        }
 
-                if (list.Count > 0)
-                {
-                    Element.ScrolTo(Control);
-                    Control.FindElement(By.ClassName("dropdown-toggle")).Click();
-                    Wait.MLSeconds(200);
-                    IWebElement ListItemele;
-                    foreach (var item in list)
-                    {
-                       ListItemele= Control.FindElement(By.LinkText(item.ToString()));
-                       Element.ScrolTo(ListItemele);
-                       ListItemele.Click();
-                       Wait.MLSeconds(100);
-                    }
-                    Control.FindElement(By.XPath("..")).Click();
-                }
-            }
-            catch (Exception)
+        public AdvertisementPage FillSearchParamitters(AdvertisementSearchModel Data)
+        {
+            FillEMemberID(Data.MemberID);
+            Select.SelectFromMultipleControl(Data.Positions, PositionControl);
+            this.TagBasedInput(Data.SearchTerms, SearchTermsControl);
+            Element.syncCheckBox(Data.IncludeSubCat, IncludeSubCatInput);
+            Select.SelectFromMultipleControl(Data.SalesReps, SalesRepsControl);
+            Select.SelectFromMultipleControl(Data.Statuses, AdStatusControl);
+            Select.ByText(YearDD, Data.Year.ToString());
+            Select.ByText(MonthDD, Data.Month.ToString());
+            Select.SelectFromMultipleControl(Data.Rates, RateControl);
+            FilterTextfield.SendKeys(Data.SearchField == null ? "" : Data.SearchField);
+            this.Search();
+            return this;
+        }
+
+        private string FindAddIDFromResultRow(IWebElement ResultRow)
+        {
+            return ResultRow.FindElement(By.CssSelector("div[ng-bind-html='orderLine.Id.toString() | highlight:filterText']")).Text;
+        }
+        private void SelectRow(IWebElement ResultRow)
+        {
+
+            ResultRow.FindElement(By.CssSelector("input[ng-click='loginfo(orderLine)']")).Click();
+            Wait.MLSeconds(200);
+        }
+
+        private void ChangeStatusofSelectedAds(string p)
+        {
+            ChangeStatusDropDown.Click();
+            Wait.MLSeconds(200);
+            //drive
+        }
+        #endregion
+
+
+        #region Search Methods
+
+
+        internal AdvertisementPage SearchByMemeberID(string p)
+        {
+            this.FillEMemberID(p);
+            this.Search();
+            this.VerifyMemberIdSerch(p);
+            return this;
+        }
+        internal AdvertisementPage SearchByPosition(IList<int> pList)
+        {
+            Select.SelectFromMultipleControl(pList, PositionControl);
+            this.Search();
+            this.verifySearchByPostion(pList);
+            return this;
+        }
+        internal void SearchByTerms(IList<string> list)
+        {
+            this.TagBasedInput(list, SearchTermsControl);
+            this.Search();
+            this.VerifySearchTerms(list);
+        }
+        internal void SearchByAddStatus(IList<string> list)
+        {
+            Select.SelectFromMultipleControl(list, AdStatusControl);
+            this.Search();
+            this.VerifyStatuses(list);
+        }
+        internal void SearchByRate(IList<string> list)
+        {
+            Select.SelectFromMultipleControl(list, RateControl);
+            this.Search();
+            this.verifyIFResultExists();
+        }
+        internal void FreeFormSerch()
+        {
+            this.Search();
+            this.verifyIFResultExists();
+        }
+        
+        #endregion
+
+
+        #region Verifications
+        private void VerifyMemberIdSerch(string p)
+        {
+            IList<IWebElement> Rows = GetRowsOfGrid();
+            IWebElement Element = Rows.FirstOrDefault(e => this.FindMemberIdFromResultRow(e) != p);
+            if (Element == default(IWebElement))
             {
-                
-                //throw;
+                Logger.Log(LogingType.TestCasePass, "Search With Member Id Result Verified");
             }
+            else
+            {
+                Logger.Log(LogingType.TextCaseFail, "Search With Member Id Result Not Verified");
+                throw new Exception();
+            }
+            //  this.FindMemberIdFromResultRow(Rows[0]);
+
+        }
+
+
+        private void verifySearchByPostion(IList<int> pList)
+        {
+            IList<IWebElement> Rows = GetRowsOfGrid();
+
+            IWebElement Element = Rows.FirstOrDefault(e => pList.Any(x => x != this.FindPositionFromResultRow(e)));
+            if (Element == default(IWebElement))
+            {
+                Logger.Log(LogingType.TestCasePass, "Search By Position Result Verified");
+            }
+            else
+            {
+                Logger.Log(LogingType.TextCaseFail, "Search By Position Result Not Verified");
+                throw new Exception();
+            }
+        }
+
+        private void VerifySearchTerms(IList<string> list)
+        {
+            IList<IWebElement> Rows = GetRowsOfGrid();
+
+            IWebElement Element = Rows.FirstOrDefault(e => list.Any(x => x != this.FindSearchTermsFromResultRow(e)));
+            if (Element == default(IWebElement))
+            {
+                Logger.Log(LogingType.TestCasePass, "Search By Terms Result Verified");
+            }
+            else
+            {
+                Logger.Log(LogingType.TextCaseFail, "Search By Terms Result Not Verified");
+                throw new Exception();
+            }
+        }
+
+        private void VerifyStatuses(IList<string> list)
+        {
+            IList<IWebElement> Rows = GetRowsOfGrid();
+
+            IWebElement Element = Rows.FirstOrDefault(e => list.Any(x => x != this.FindStatusFromResultRow(e)));
+            if (Element == default(IWebElement))
+            {
+                Logger.Log(LogingType.TestCasePass, "Search By Status Result Verified");
+            }
+            else
+            {
+                Logger.Log(LogingType.TextCaseFail, "Search By Status Result Not Verified");
+                throw new Exception();
+            }
+        }
+        private void verifyIFResultExists()
+        {
+            IList<IWebElement> Rows = GetRowsOfGrid();
+
+            if (Rows.Count > 0)
+            {
+                Logger.Log(LogingType.TestCasePass, "Search Result Exists Verified");
+            }
+            else
+            {
+                Logger.Log(LogingType.TextCaseFail, "Search Result Not Exists");
+                throw new Exception();
+            }
+        }
+
+
+
+
+
+        #endregion
+
+
+        internal void ExportAllAdds()
+        {
+            this.Search();
+            FileHandler.BerforeDownLoadNotification();
+            DownloadAdsBtn.Click();
+            Wait.UntilDownloading();
+            FileHandler.CheckIfExcelFileContainRecords(FileHandler.FindExcelFilePathForReport());
             
         }
+
+        internal void ChangeAdStatus(AdvertisementSearchModel advertisementSearchModel)
+        {
+            string AddID, Status;
+            this.FillSearchParamitters(advertisementSearchModel);
+            this.Search();
+            IWebElement ResultRow = this.GetRowsOfGrid()[0];
+            Status = this.FindStatusFromResultRow(ResultRow);
+            AddID = this.FindAddIDFromResultRow(ResultRow);
+            this.SelectRow(ResultRow);
+            this.ChangeStatusofSelectedAds("Work In Progress");
+        }
+
 
 
 
