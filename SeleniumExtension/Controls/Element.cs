@@ -35,6 +35,28 @@ namespace SeleniumExtension.Controls
 
             }
         }
+        public static bool Dispaly(IWebElement by)
+        {
+
+            IWebDriver driver = SDriver.Browser;
+            try
+            {
+                IWebElement ellemnt = by;
+                if (ellemnt.Displayed)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+
+            }
+        }
         public static void ScrolTo(By by)
         {
 
@@ -116,27 +138,6 @@ namespace SeleniumExtension.Controls
             return null;
         }
 
-        internal static bool Dispaly(IWebElement ele)
-        {
-            //IWebDriver driver = SDriver.Browser;
-            try
-            {
-                IWebElement ellemnt = ele;
-                if (ellemnt.Displayed)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            catch (Exception ex)
-            {
-                return false;
-
-            }
-        }
 
         internal static IWebElement GetParent(IWebElement CategoryField)
         {
@@ -146,6 +147,14 @@ namespace SeleniumExtension.Controls
         internal static IWebElement FindByTagAndTextInContainer(IWebElement dialog,string Text,string Tag)
         {
           return  dialog.FindElements(By.TagName(Tag)).First(e => e.Text == Text);
+        }
+
+
+        public static void MoveTo(IWebElement Ele)
+        {
+            IWebDriver driver = SDriver.Browser;
+            Actions builder = new Actions(driver);
+            builder.MoveToElement(Ele).Perform();
         }
     }
 }

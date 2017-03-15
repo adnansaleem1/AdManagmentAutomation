@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LinqToExcel;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
@@ -34,6 +35,11 @@ namespace SeleniumExtension.Utilties
                 @"Provider=Microsoft.Jet.OleDb.4.0; Data Source={0};Extended Properties=""Text;HDR=YES;FMT=Delimited""",
                 Path.GetDirectoryName(filename)
             );
+            //var connString = string.Format(
+           //     @"Provider=Microsoft.Jet.OLEDB.4.0; Data Source={0};Extended Properties=Excel 8.0;",
+           //     Path.GetDirectoryName(filename)
+           // );
+            
             using (var conn = new OleDbConnection(connString))
             {
                 string query;
@@ -56,5 +62,20 @@ namespace SeleniumExtension.Utilties
                 }
             }
         }
+
+        public DataSet ReadExcelFile(string fn)
+        {
+            var filename =fn;
+            string sql = "SELECT * FROM [Sheet1$]";
+            string excelConnection = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + fn + ";Extended Properties=Excel 12.0;";
+            excelConnection=string.Format("Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties=Excel 12.0 Xml;HDR=YES;IMEX=1;", fn);
+            using (OleDbDataAdapter adaptor = new OleDbDataAdapter(sql, excelConnection))
+            {
+                DataSet ds = new DataSet();
+                adaptor.Fill(ds);
+                return ds;
+            }
+        }
+
     }
 }

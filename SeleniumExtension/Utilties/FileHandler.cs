@@ -1,4 +1,6 @@
-﻿using SeleniumExtension.Ref;
+﻿using iText.Kernel.Pdf;
+using LinqToExcel;
+using SeleniumExtension.Ref;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -34,6 +36,27 @@ namespace SeleniumExtension.Utilties
             }
             return false;
         }
+        public static string FindPDFFilePathForReport()
+        {
+            try
+            {
+                System.IO.DirectoryInfo di = new DirectoryInfo(Config.DefaultFileDownloadPath);
+
+                foreach (FileInfo file in di.GetFiles())
+                {
+                    if (file.Extension == ".pdf")
+                    {
+                        return file.FullName;
+                    }
+                }
+                throw new Exception("No PDF fileFound.");
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
         public static string FindExcelFilePathForReport()
         {
             try
@@ -44,6 +67,13 @@ namespace SeleniumExtension.Utilties
                 {
                     if (file.Extension == ".xlsx" || file.Extension == ".xls" || file.Extension == ".csv")
                     {
+                        //if (file.Extension == ".xls")
+                        //{
+                        //  // string result= Path.ChangeExtension(file.FullName, ".csv");
+                        //    string result=Path.ChangeExtension(file.FullName, ".csv");
+                        //    File.Move(file.FullName, Path.ChangeExtension(file.FullName, ".csv"));
+                        //    return result;
+                        //}
                         return file.FullName;
                     }
                 }
@@ -60,6 +90,31 @@ namespace SeleniumExtension.Utilties
             ExcelReader reader = new ExcelReader(filename);
             DataSet FileTable = reader.ReadExcelFile();
             if (FileTable.Tables[0].Rows.Count > 0 && FileTable.Tables[0].Columns.Count > 0)
+            {
+                return true;
+            }
+            else
+            {
+
+                throw new Exception("Excel File does not contain any records.");
+            }
+
+        }
+        public static bool CheckIfExcelFileContainRecordsLib(string filename)
+        {
+            //var filename = fn;
+            ExcelReader reader = new ExcelReader(filename);
+            DataSet FileTable = reader.ReadExcelFile(filename);
+            ExcelQueryFactory excelFile = new ExcelQueryFactory(filename);
+            return true;
+        }
+        public static bool CheckIfPDFFileContainRecords(string filename)
+        {
+
+            PdfDocument origPdf = new PdfDocument(new PdfReader(filename));
+           PdfPage page= origPdf.GetPage(1);
+
+           if (origPdf.GetNumberOfPages()>=1)
             {
                 return true;
             }

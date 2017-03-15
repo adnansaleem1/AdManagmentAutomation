@@ -1,4 +1,6 @@
 ﻿using AddManagmentData.Model;
+using AdManagementT_Automation.Base;
+using AdManagementT_Automation.Ref;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
 using SeleniumExtension.Controls;
@@ -123,10 +125,10 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
         private IWebElement ProductsearchModelCancelbtn { get; set; }
 
         [FindsBy(How = How.CssSelector, Using = "ul[move-in-progress='moveInProgress']")]
-        private IWebElement SearchTermsListParent { get; set; } 
-        
+        private IWebElement SearchTermsListParent { get; set; }
+
         #endregion
-        
+
 
         public EditOrderLinePage FillOrderLine(OrderLineModel OrderLineData)
         {
@@ -134,10 +136,16 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
             Select.ByText(ProductGroupDD, OrderLineData.ProductGroup);
             Wait.MLSeconds(200);
             Select.ByText(AddTypeDD, OrderLineData.AddType);
-            Wait.MLSeconds(200);
-            Select.ByText(PositionDD, OrderLineData.Position.ToString());
-            Wait.MLSeconds(200);
-            SelectSearchTerms(OrderLineData.SearchTerm);
+            Wait.MLSeconds(1000);
+            if (OrderLineData.Position != null && OrderLineData.Position != 0)
+            {
+                Select.ByText(PositionDD, OrderLineData.Position.ToString());
+                Wait.MLSeconds(200);
+            }
+            if (OrderLineData.SearchTerm != null && OrderLineData.SearchTerm != "")
+            {
+                SelectSearchTerms(OrderLineData.SearchTerm);
+            }
             ProductInfoField.Click();
             Wait.MLSeconds(200);
             Select.ByText(DeliveryPrefDD, OrderLineData.DeliveryPreferences);
@@ -145,9 +153,12 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
             ProductInfoField.Clear();
             ProductInfoField.SendKeys(OrderLineData.ProductInformation);
             Wait.MLSeconds(100);
-            ImpressionsField.Clear();
-            ImpressionsField.SendKeys(OrderLineData.Impressions.ToString());
-            Wait.MLSeconds(100);
+            if (OrderLineData.Impressions != null)
+            {
+                ImpressionsField.Clear();
+                ImpressionsField.SendKeys(OrderLineData.Impressions.ToString());
+                Wait.MLSeconds(100);
+            }
             if (OrderLineData.Cost != null && OrderLineData.Cost != 0.0)
             {
                 CostField.Clear();
@@ -156,6 +167,7 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
             }
             else
             {
+                Wait.MLSeconds(300);
                 ProductInfoField.Click();
                 Wait.MLSeconds(200);
             }
@@ -207,11 +219,11 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
             {
                 Select.ByText(groupNameDD, OrderLineData.AddGroupName);
             }
-            if (!OrderLineData.ProductSelectionManual)
+            if (OrderLineData.ProductSelectionManual == false && OrderLineData.ProductSelectionManual != null)
             {
                 Element.GetByValueFromList(AutoProductSelectionRadio, "1").Click();
             }
-            else if (OrderLineData.ProductId_ManualSelection.Count > 0)
+            else if (OrderLineData.ProductId_ManualSelection != null && OrderLineData.ProductId_ManualSelection.Count > 0)
             {
                 foreach (var item in OrderLineData.ProductId_ManualSelection)
                 {
@@ -219,7 +231,8 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
                 }
             }
 
-            if (OrderLineData.Status != null) {
+            if (OrderLineData.Status != null)
+            {
                 Element.ScrolTo(StatusDD);
                 Select.ByText(StatusDD, OrderLineData.Status);
                 Wait.MLSeconds(100);
@@ -231,7 +244,8 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
         {
             SearchTermField.Clear();
             SearchTermField.SendKeys(searchTerms);
-            Wait.MLSeconds(200);
+            Wait.UntilDisply(SearchTermsListParent);
+            Wait.MLSeconds(100);
             IWebElement Element = SearchTermsListParent.FindElements(By.TagName("li")).FirstOrDefault(e => e.Text == searchTerms);
             Element.Click();
             Wait.MLSeconds(200);
@@ -241,6 +255,7 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
         {
             Element.ScrolTo(AddProductBtn);
             AddProductBtn.Click();
+            Wait.UntilAllToastMessageHide();
             Wait.UntilDisply(By.Id("productSearchForm"));
             ProductSearchByDropDown.Click();
             Wait.MLSeconds(100);
@@ -248,15 +263,16 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
             ProductSearchField.SendKeys(ProductId_ManualSelection);
             Wait.MLSeconds(200);
             ProductSearchBtn.Click();
-            By DispledElement=Wait.UntilDisply(new List<By>() { By.ClassName("toast-message"), By.ClassName("product-results") });
-
-            if (DispledElement.ToString() =="By.ClassName[Contains]: product-results")
+            By DispledElement = Wait.UntilDisply(new List<By>() { By.ClassName("toast-message"), By.ClassName("product-results") });
+            Wait.MLSeconds(200);
+            if (DispledElement.ToString() == "By.ClassName[Contains]: product-results")
             {
                 IList<IWebElement> pList = ProductsearchResult.FindElements(By.CssSelector("div[ng-click='addProductSelection(product)']"));
-                IWebElement Productele= pList.FirstOrDefault(e => e.Text.Contains(ProductId_ManualSelection));
+                IWebElement Productele = pList.FirstOrDefault(e => e.Text.Contains(ProductId_ManualSelection));
                 Productele.Click();
                 Wait.MLSeconds(500);
-            }else
+            }
+            else
             {
                 Logger.Log(LogingType.NoResult, string.Format("Serch product by Id : {0}", ProductId_ManualSelection));
             }
@@ -293,7 +309,38 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
             return this;
 
         }
+        public EditOrderLinePage Save()
+        {
+            Element.ScrolTo(OrderLineSaveBtn);
+            OrderLineSaveBtn.Click();
+            this.verfiySave();
+            return this;
+        }
 
+        private void verfiySave()
+        {
+            string result = Wait.UntilToastMessageShow();
+            if (result == "Remaining inventory not available for this search term" || result.Contains("Product is not relevant to the ad"))
+            {
+                result = Wait.UntilToastMessageShow();
+            }
+            if (result == "Saved successfully")
+            {
+                Logger.Log(LogingType.TestCasePass, "Product Save Successfully");
+
+            }
+            else if (result == "Updated successfully")
+            {
+
+                Logger.Log(LogingType.TestCasePass, "Product Updated Successfully");
+
+            }
+            else
+            {
+                Logger.Log(LogingType.TextCaseFail, result);
+                throw new Exception(result);
+            }
+        }
         internal EditOrderLinePage VerifySaveAndCopy()
         {
 
@@ -303,6 +350,21 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
         internal void VerfiyMultipleProducts(int p)
         {
             throw new NotImplementedException();
+        }
+        internal void GoBackToOrderLine()
+        {
+            PagesRepo.AddTabs.Switch(AM_Sub_Insertion_Orders.Edit_Order);
+        }
+
+        internal void Update(OrderLineModel data)
+        {
+            if (data.Status != null)
+            {
+                Element.ScrolTo(StatusDD);
+                Select.ByText(StatusDD, data.Status);
+                Wait.MLSeconds(100);
+            }
+            this.Save();
         }
     }
 }

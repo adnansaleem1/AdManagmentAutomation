@@ -61,6 +61,20 @@ namespace AdManagementT_Automation.Controls
                 Wait.AM_Loaging_ShowAndHide();
             }
         }
+        internal void Switch(AM_Sub_Insertion_Orders aM_Sub_Order)
+        {
+
+            if (this.GetActiveMainTab() != AM_MainTab.Insertion_Orders)
+            {
+                this.Switch(AM_MainTab.Admin);
+            }
+            if (aM_Sub_Order == AM_Sub_Insertion_Orders.Edit_Order)
+            {
+                driver.FindElement(By.LinkText("Edit Order")).Click();
+                //  Wait.UntilDisply(By.Id("drpApplication"));
+                Wait.AM_Loaging_ShowAndHide();
+            }
+        }
         internal AM_MainTab GetActiveMainTab() {
             string Active = driver.FindElements(By.CssSelector("li[ng-repeat='menu in mainmenu']")).First(e => e.GetAttribute("class").Contains("active")).Text;
             if (Active == "Admin") {

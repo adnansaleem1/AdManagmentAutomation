@@ -42,15 +42,16 @@ namespace AdManagementT_Automation.Pages.Inventory
 
         [FindsBy(How = How.CssSelector, Using = "table[data-ng-table='tableParams']")]
         private IWebElement ResultGrid { get; set; }
-               
+
         [FindsBy(How = How.Id, Using = "menu1")]
         private IWebElement InventoryTypeMenu { get; set; }
-       
+
         [FindsBy(How = How.CssSelector, Using = "ul[aria-labelledby='menu1']")]
         private IWebElement InventoryTypeMenuList { get; set; }
-        
-        
-        public InventoryPage Navigate() {
+
+
+        public InventoryPage Navigate()
+        {
             PagesRepo.AddTabs.Switch(AM_MainTab.Invetory);
             return this;
         }
@@ -63,10 +64,12 @@ namespace AdManagementT_Automation.Pages.Inventory
             {
                 this.SelectInventoryType(inventory.InventoryType);
             }
-            if (!string.IsNullOrEmpty(inventory.ProductGroup)) {
+            if (!string.IsNullOrEmpty(inventory.ProductGroup))
+            {
                 Select.ByText(Productgroup, inventory.ProductGroup);
             }
-            if (!string.IsNullOrEmpty(inventory.AdType)) {
+            if (!string.IsNullOrEmpty(inventory.AdType))
+            {
                 Select.ByText(AdType, inventory.AdType);
             }
             if (!string.IsNullOrEmpty(inventory.Month))
@@ -75,37 +78,52 @@ namespace AdManagementT_Automation.Pages.Inventory
             }
             if (!string.IsNullOrEmpty(inventory.Year.ToString()))
             {
-                Select.ByText(Year, inventory.AdType.ToString());
+                Select.ByText(Year, inventory.Year.ToString());
             }
-            if (inventory.SearchTerms.Count>0)
+            if (inventory.SearchTerms.Count > 0)
             {
-                Select.SelectFromMultipleControl(inventory.SearchTerms,searchTermsControl);
+                Select.SelectFromMultipleControl(inventory.SearchTerms, searchTermsControl);
             }
             Element.syncCheckBox(inventory.IncludeSubCat, SubCatagoriesCheckbox);
             Wait.MLSeconds(100);
             return this;
         }
 
-        internal InventoryPage Search() {
+        internal InventoryPage Search()
+        {
 
             SearchBtn.Click();
             Wait.AM_Loaging_ShowAndHide();
-            return this;        
+            return this;
         }
 
-        internal void VerifySearchResultWithSubTerms(string p) {
-           IList<IWebElement> ResultList=  this.GetResultRows();
-           var Count = ResultList.Count(e => e.FindElement(By.CssSelector("td[data-title-text='Search Term']")).Text.Contains(p + "/"));
-           if (Count > 0)
-           {
-               Logger.Log(LogingType.TestCasePass, "Inventory Search Result contain sub categories.");
-           }
-           else {
-               Logger.Log(LogingType.TextCaseFail, "Inventory Search Result does not contain sub categories.");                     
-           }
+        internal void VerifySearchResultWithSubTerms(string p)
+        {
+            IList<IWebElement> ResultList = this.GetResultRows();
+            var Count = ResultList.Count(e => e.FindElement(By.CssSelector("td[data-title-text='Search Term']")).Text.Contains(p + "/"));
+            if (Count > 0)
+            {
+                Logger.Log(LogingType.TestCasePass, "Inventory Search Result contain sub categories.");
+            }
+            else
+            {
+                Logger.Log(LogingType.TextCaseFail, "Inventory Search Result does not contain sub categories.");
+            }
 
         }
-        private IList<IWebElement> GetResultRows() {
+
+        internal IWebElement GetResultFromSearch(string p)
+        {
+            IList<IWebElement> ResultList = this.GetResultRows();
+            var Result = ResultList.FirstOrDefault(e => e.FindElement(By.CssSelector("td[data-title-text='Search Term']")).Text.Contains(p + "/"));
+            if (Result == null)
+            {
+                throw new Exception("No Result Found With given term.");
+            }
+            return Result;
+        }
+        private IList<IWebElement> GetResultRows()
+        {
             return ResultGrid.FindElements(By.CssSelector("tr[data-ng-repeat='inventory in $data']"));
         }
 
@@ -115,6 +133,14 @@ namespace AdManagementT_Automation.Pages.Inventory
             Wait.MLSeconds(100);
             InventoryTypeMenuList.FindElement(By.LinkText(p)).Click();
             Wait.MLSeconds(300);
+        }
+
+        internal void CreateProposal(AddManagmentData.Model.InventoryModel Data)
+        {
+            IWebElement Result = this.GetResultFromSearch(Data.SearchTerms[0]);
+            Result.FindElement(By.CssSelector("input[checklist-value='inventory']")).Click();
+            Wait.MLSeconds(100);
+            CreateProposalBtn.Click();
         }
     }
 }

@@ -18,7 +18,7 @@ namespace SeleniumExtension.Controls
             {
                 IWebDriver driver = SDriver.Browser;
                 SelectElement Select = new SelectElement(ele);
-                Wait.MLSeconds(100);
+                Wait.MLSeconds(1000);
                 Select.SelectByText(option);
             }
         }

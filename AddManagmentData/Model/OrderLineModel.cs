@@ -10,13 +10,13 @@ namespace AddManagmentData.Model
     {
         public string ProductGroup { get; set; }
         public string AddType { get; set; }
-        public int Position { get; set; }
+        public int? Position { get; set; }
         public string SearchTerm { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string DeliveryPreferences { get; set; }
         public string ProductInformation { get; set; }
-        public int Impressions { get; set; }
+        public int? Impressions { get; set; }
         public double? Cost { get; set; }
         public bool RateEnable { get; set; }
         public double Rate { get; set; }
@@ -31,7 +31,7 @@ namespace AddManagmentData.Model
         public int? Priority { get; set; }
         public int? ImpressionsPerDay { get; set; }
         public string AddGroupName { get; set; }
-        public bool ProductSelectionManual { get; set; }
+        public bool? ProductSelectionManual { get; set; }
         public string Status { get; set; }
         public IList<string> ProductId_ManualSelection { get; set; }
     }

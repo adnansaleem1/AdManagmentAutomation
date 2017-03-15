@@ -173,11 +173,38 @@ namespace SeleniumExtension.Utilties
 
         public static string UntilToastMessageShow()
         {
+            string msg;
             Wait.InstantUntilDisply(By.ClassName("toast-message"));
             IWebDriver driver = SDriver.Browser;
-            return driver.FindElement(By.ClassName("toast-message")).Text;
+            IWebElement ToastEle=driver.FindElement(By.ClassName("toast-message"));
+            msg = ToastEle.Text;
+            try
+            {
+                ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].style.visibility='hidden'", ToastEle);
+            }
+            catch (Exception)
+            {
+            }
+            return msg;
         }
 
+        public static void UntilAllToastMessageHide()
+        {
+            IWebDriver driver = SDriver.Browser;
+            var ToastList= driver.FindElements(By.ClassName("toast-message"));
+            foreach(var toast in ToastList){
+                try
+                {
+
+                    toast.Click();
+
+                }
+                catch (Exception)
+                {
+                }
+            }
+            Wait.UntilHide(By.ClassName("toast-message"));
+        }
         private static void InstantUntilDisply(By by)
         {
             int MaxWaited = 30;
