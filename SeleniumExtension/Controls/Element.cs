@@ -78,6 +78,27 @@ namespace SeleniumExtension.Controls
                 //throw;
             }
         }
+        public static void ScrolToTop()
+        {
+
+            try
+            {
+                IWebDriver driver = SDriver.Browser;
+                //IWebElement element = driver.FindElement(by);
+                //  ((IJavaScriptExecutor)driver).ExecuteScript("window.scrollTo(" + x + "," + y + ");");
+
+                Actions actions = new Actions(driver);
+                actions.MoveByOffset(0,0);
+                //actions.click();
+                actions.Perform();
+                Wait.Second(1);
+            }
+            catch (Exception)
+            {
+
+                //throw;
+            }
+        }
         public static void ScrolTo(IWebElement ele)
         {
 

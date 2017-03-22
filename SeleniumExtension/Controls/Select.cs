@@ -19,6 +19,7 @@ namespace SeleniumExtension.Controls
                 IWebDriver driver = SDriver.Browser;
                 SelectElement Select = new SelectElement(ele);
                 Wait.MLSeconds(1000);
+                //Wait.UntilDisply(option);
                 Select.SelectByText(option);
             }
         }
@@ -99,6 +100,7 @@ namespace SeleniumExtension.Controls
             }
         }
 
+
         public static void ByFreeKeyWords(IWebElement KeyWordsControl, IList<string> list)
         {
             IWebElement InputBox= KeyWordsControl.FindElement(By.TagName("input"));
@@ -108,6 +110,19 @@ namespace SeleniumExtension.Controls
                 InputBox.SendKeys(Keys.Enter);
                 Wait.MLSeconds(100);
             }
+        }
+
+        public static void TagBasedInput(IList<string> list, IWebElement Control)
+        {
+            Element.ScrolTo(Control);
+            foreach (var item in list)
+            {
+                Control.FindElement(By.TagName("input")).SendKeys(item);
+                Wait.UntilDisply(By.ClassName("autocomplete"));
+                Control.FindElement(By.TagName("input")).SendKeys(Keys.Enter);
+                Wait.MLSeconds(200);
+            }
+
         }
     }
 }

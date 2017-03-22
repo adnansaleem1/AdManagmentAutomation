@@ -8,6 +8,7 @@ using SeleniumExtension.Ref;
 using SeleniumExtension.Utilties;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -41,6 +42,8 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
         [FindsBy(How = How.CssSelector, Using = "input[data-ng-model='orderLine.TargetAmount']")]
         private IWebElement CostField { get; set; }
 
+          [FindsBy(How = How.CssSelector, Using = "input[data-ng-model='orderLine.EndDate']")]
+        private IWebElement EndDate { get; set; }
 
         [FindsBy(How = How.CssSelector, Using = "input[data-ng-model='orderLine.AllowRateOverwrite']")]
         private IWebElement RateCheckBox { get; set; }
@@ -145,6 +148,9 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
             if (OrderLineData.SearchTerm != null && OrderLineData.SearchTerm != "")
             {
                 SelectSearchTerms(OrderLineData.SearchTerm);
+            }
+            if (OrderLineData.EndDate != null) {
+                EndDate.SendKeys(OrderLineData.EndDate.Value.ToString("M/d/yyyy"));
             }
             ProductInfoField.Click();
             Wait.MLSeconds(200);
@@ -319,39 +325,50 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
 
         private void verfiySave()
         {
-            string result = Wait.UntilToastMessageShow();
-            if (result == "Remaining inventory not available for this search term" || result.Contains("Product is not relevant to the ad"))
-            {
-                result = Wait.UntilToastMessageShow();
-            }
-            if (result == "Saved successfully")
+            IList<string> result = Wait.UntilToastMessageShow();
+
+            if (result.Any(e => e == "Saved successfully" || e == "Saved and added successfully"))
             {
                 Logger.Log(LogingType.TestCasePass, "Product Save Successfully");
 
             }
-            else if (result == "Updated successfully")
+            else if (result.Any( e=> e== "Updated successfully"))
             {
 
                 Logger.Log(LogingType.TestCasePass, "Product Updated Successfully");
 
             }
+            else if (result.Any(e => e.Contains("Product is not relevant to the ad")))
+            {
+              //  Logger.Log(LogingType.TextCaseFail, result[0]);
+              //  throw new Exception(result.ToString());
+                this.verfiySave();
+            }
+
             else
             {
-                Logger.Log(LogingType.TextCaseFail, result);
-                throw new Exception(result);
+                Logger.Log(LogingType.TextCaseFail, result.ToString());
+                throw new Exception(result.ToString());
             }
         }
         internal EditOrderLinePage VerifySaveAndCopy()
         {
-
+            this.verfiySave();
             return this;
+          
         }
-
+        internal EditOrderLinePage VerifySaveAndAdd()
+        {
+            this.verfiySave();
+            return this;
+            Wait.UntilLoading();
+            Element.ScrolToTop();
+        }
         internal void VerfiyMultipleProducts(int p)
         {
             throw new NotImplementedException();
         }
-        internal void GoBackToOrderLine()
+        internal void GoBackOrder()
         {
             PagesRepo.AddTabs.Switch(AM_Sub_Insertion_Orders.Edit_Order);
         }

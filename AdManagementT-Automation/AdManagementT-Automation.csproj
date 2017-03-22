@@ -114,6 +114,7 @@
     <Compile Include="Pages\Insertion Orders\EditOrder.cs" />
     <Compile Include="Pages\Insertion Orders\EditOrderLine.cs" />
     <Compile Include="Pages\Insertion Orders\NoteModel.cs" />
+    <Compile Include="Pages\Inventory\WaitListPage.cs" />
     <Compile Include="Pages\Proposals\CreateProposalPage.cs" />
     <Compile Include="Pages\Inventory\InventoryPage.cs" />
     <Compile Include="Pages\LoginPage.cs" />

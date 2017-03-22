@@ -23,17 +23,37 @@ namespace AddManagmentData.Data
                 };
             }
         }
-        public static InventoryModel CreateProposal
+
+        public static InventoryModel PositionUpdate
         {
             get
             {
                 return new InventoryModel()
                 {
                     InventoryType = "PFP",
+                    ProductGroup = "ESP",
+                    AdType = "PFP",
+                    IncludeSubCat = true,
+                    SearchTerms = new List<string>() { "GENERAL/screen printing" }
+                };
+            }
+        }
+
+        public static PropsalModel CreateProposal
+        {
+            get
+            {
+                return new PropsalModel()
+                {
+                    InventoryType = "PFP",
                     ProductGroup = "ESP Websites",
                     AdType = "PFP",
                     IncludeSubCat = true,
-                    SearchTerms = new List<string>() { "PENS/ALUMINUM PENS" }
+                    SearchTerms = new List<string>() { "BAGS/BAGS-BOTTLE" },
+                    MemberId = "88660",
+                    Contact = "Alana Wechsler",
+                    SalesRep = "Ryan David",
+                    ProposalName="Test Automation"
                 };
             }
         }

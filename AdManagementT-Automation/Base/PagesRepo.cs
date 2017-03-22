@@ -31,12 +31,7 @@ namespace AdManagementT_Automation.Base
         public static AdvertisementPage Advertisement { get { return PagesRepo.GetPage<AdvertisementPage>(); } }
         public static InventoryPage Inventory { get { return PagesRepo.GetPage<InventoryPage>(); } }
         public static PagesPage adminpages { get { return PagesRepo.GetPage<PagesPage>(); } }
-
-
-
-
-
-
+        public static WaitListPage Waitlistpage { get { return PagesRepo.GetPage<WaitListPage>(); } }
 
     }
 }

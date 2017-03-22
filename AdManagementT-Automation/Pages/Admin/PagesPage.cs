@@ -91,15 +91,15 @@ namespace AdManagementT_Automation.Pages.Admin
         }
         private PagesPage VerifySavePage()
         {
-            String msg = Wait.UntilToastMessageShow();
+            IList<string> msg = Wait.UntilToastMessageShow();
 
-            if (msg == "Saved successfully")
+            if (msg.Any(e=>e== "Saved successfully"))
             {
                 Logger.Log(LogingType.Success, "Page Saved successfully");
                 Wait.AM_Loaging_ShowAndHide();
                 return this;
             }
-            else if (msg == "Page already exist. Please generate a valid Page")
+            else if (msg.Any(e=>e== "Page already exist. Please generate a valid Page"))
             {
                 Logger.Log(LogingType.Error, "Page already exist. Please generate a valid Page");
                 this.CancelnewPage();

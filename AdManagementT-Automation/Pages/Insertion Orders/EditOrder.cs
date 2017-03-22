@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using SeleniumExtension.Controls;
 using AddManagmentData.Model;
 using SeleniumExtension.Ref;
+using AdManagementT_Automation.Base;
+using AdManagementT_Automation.Ref;
 
 namespace AdManagementT_Automation.Pages.Insertion_Orders
 {
@@ -109,7 +111,7 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
                 {
                     Element.MoveTo(aNote);
                     aNote.FindElement(By.CssSelector("button[data-ng-click='deleteNote(note)']")).Click();
-                    string result = Wait.UntilToastMessageShow();
+                    IList<string> result = Wait.UntilToastMessageShow();
                 }
                 return true;
             }
@@ -131,8 +133,8 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
         private void SaveNote(string Note)
         {
             this.AddNoteBtn.Click();
-            string Result = Wait.UntilToastMessageShow();
-            if (Result == "Saved successfully")
+            IList<string> Result = Wait.UntilToastMessageShow();
+            if (Result.Any( e=>e== "Saved successfully"))
             {
                 //AdGroupForm_CancelBtn.Click();
                 Wait.Second(1);
@@ -144,8 +146,8 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
 
                 AdGroupForm_CancelBtn.Click();
                 Wait.Second(1);
-                Logger.Log(LogingType.TextCaseFail, "Save Note Save Failed - " + Result);
-                throw new Exception(Result);
+                Logger.Log(LogingType.TextCaseFail, "Save Note Save Failed - " + Result.ToString());
+                throw new Exception(Result.ToString());
             }
         }
 
@@ -175,7 +177,7 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
                 {
                     Element.MoveTo(AdGroup);
                     AdGroup.FindElement(By.CssSelector("button[data-ng-click='deleteGroup(adgroup)']")).Click();
-                    string result = Wait.UntilToastMessageShow();
+                    IList<string> result = Wait.UntilToastMessageShow();
 
 
                 }
@@ -210,8 +212,8 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
         private void SaveAddGroup(AdGroupModel data)
         {
             this.AdGroupForm_SaveBtn.Click();
-            string Result = Wait.UntilToastMessageShow();
-            if (Result == "Saved successfully")
+            IList<string> Result = Wait.UntilToastMessageShow();
+            if (Result.Any( e=>e==  "Saved successfully"))
             {
                 //AdGroupForm_CancelBtn.Click();
                 Wait.Second(1);
@@ -223,8 +225,8 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
 
                 AdGroupForm_CancelBtn.Click();
                 Wait.Second(1);
-                Logger.Log(LogingType.TextCaseFail, "Ad Group Save Failed - " + Result);
-                throw new Exception(Result);
+                Logger.Log(LogingType.TextCaseFail, "Ad Group Save Failed - " + Result.ToString());
+                throw new Exception(Result.ToString());
             }
         }
 
@@ -373,9 +375,9 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
         }
         private bool verfiyDelete()
         {
-            string result = Wait.UntilToastMessageShow();
+            IList<string> result = Wait.UntilToastMessageShow();
 
-            if (result == "Deleted successfully")
+            if (result.Any( e=>e==  "Deleted successfully"))
             {
 
                 return true;
@@ -386,12 +388,16 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
             }
         }
 
-        internal void DeleteResultBannerIfAlreadyExists(OrderLineModel orderLineModel)
+        internal bool DeleteResultBannerIfAlreadyExists(OrderLineModel orderLineModel)
         {
             var oldOrderLine = this.SearchOrderLine(orderLineModel.SearchTerm, orderLineModel.ProductInformation);
             if (oldOrderLine != null)
             {
                 this.DeleteRow(oldOrderLine);
+                return true;
+            }
+            else {
+                return false;
             }
         }
 
@@ -446,6 +452,41 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
             {
                 return Double.Parse(Total, System.Globalization.NumberStyles.Currency);
             }
+        }
+
+        internal void ClearFilter()
+        {
+            IWebElement FilterRow = OrderLineGrid.FindElement(By.TagName("thead")).FindElements(By.TagName("tr"))[1];
+            var Filters=FilterRow.FindElements(By.TagName("input"));
+          bool cleared=false;
+            foreach (var item in Filters) {
+                try
+                {
+                    if (item.Text.Length > 0) {
+                        cleared = true;
+                    }
+                    item.Clear();
+                }
+                catch (Exception)
+                {
+                    
+                }
+            }
+            if (cleared)
+            {
+                Wait.AM_Loaging_ShowAndHide();
+            }
+        }
+
+        internal void GoBackToAllOrders()
+        {
+            PagesRepo.AddTabs.Switch(AM_Sub_Insertion_Orders.All_Order);
+        }
+
+        internal void DeleteAllOrderLine(OrderLineModel OrderLineposData)
+        {
+            while (this.DeleteResultBannerIfAlreadyExists(OrderLineposData)) ;
+            //this.ClearFilter();
         }
     }
 }

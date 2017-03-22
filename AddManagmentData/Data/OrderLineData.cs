@@ -30,7 +30,7 @@ namespace AddManagmentData.Data
                     SearchLeadingTextAllow = true,
                     Priority = 10,
                     ProductSelectionManual = true,
-                    ProductId_ManualSelection = new List<string>() { "5625470" },
+                    ProductId_ManualSelectionList = new List<string>() { "5625470" },
                     Status = "Active"
                 };
             }
@@ -249,9 +249,66 @@ namespace AddManagmentData.Data
             }
         }
 
+        public static OrderLineModel OrderSummary_VerificationData
+        {
+            get
+            {
+                return new OrderLineModel()
+                {
+                    ProductGroup = "ESP",
+                    AddType = "PFP",
+                    Position = 1,
+                    SearchTerm = "CLOTHING/CLOTHING-SWEAT PANTS",
+                    DeliveryPreferences = "Standard",
+                    ProductInformation = "CLOTHING/CLOTHING-SWEAT PANTS",
+                    // Impressions = 20,
+                    GeoTargetEnable = false,
+                    KeyWordsEnable = true,
+                    CatogoriesEnable = true,
+                    SubsitutionsAllow = true,
+                    DisplayMultipleAddsAllow = true,
+                    SearchLeadingTextAllow = true,
+                    ProductSelectionManual = true,
+                    EndDate=DateTime.Now,
+                    Cost=50,
+                    ProductId_ManualSelection = new List<string>() { "5625470" },
+                    Priority = 10,
+                    Status = "Active"
+                };
+            }
+        }
 
+        public static OrderLineModel InventoryBookedVerification
+        {
+            get
+            {
+                return new OrderLineModel()
+                {
+                    ProductGroup = "ESP",
+                    AddType = "PFP",
+                    Position = 1,
+                    SearchTerm = "GENERAL/screen printing",
+                    DeliveryPreferences = "Standard",
+                    ProductInformation = "GENERAL/screen printing",
+                    Impressions = 5,
+                    GeoTargetEnable = false,
+                    KeyWordsEnable = true,
+                    CatogoriesEnable = true,
+                    SubsitutionsAllow = true,
+                    DisplayMultipleAddsAllow = true,
+                    SearchLeadingTextAllow = true,
+                    ProductSelectionManual = true,
+                    ProductId_ManualSelection = new List<string>() { "5625470" },
+                    Priority = 10,
+                    Status = "Active"
+                };
+            }
+        }
         public static string OrderId = "88660";
 
         public static string ActiveOrderId = "88660";
+        public static string CompleteOrderId = "80228";
+        public static string SuspandedOrderId = "68915";
+
     }
 }

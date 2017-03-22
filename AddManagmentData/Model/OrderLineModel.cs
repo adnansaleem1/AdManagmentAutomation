@@ -12,8 +12,8 @@ namespace AddManagmentData.Model
         public string AddType { get; set; }
         public int? Position { get; set; }
         public string SearchTerm { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
         public string DeliveryPreferences { get; set; }
         public string ProductInformation { get; set; }
         public int? Impressions { get; set; }
@@ -34,5 +34,7 @@ namespace AddManagmentData.Model
         public bool? ProductSelectionManual { get; set; }
         public string Status { get; set; }
         public IList<string> ProductId_ManualSelection { get; set; }
+
+        public List<string> ProductId_ManualSelectionList { get; set; }
     }
 }

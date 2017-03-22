@@ -30,8 +30,9 @@ namespace AdManagementT_Automation.Controls
                 driver.FindElement(By.LinkText("Advertisements")).Click();
                 Wait.UntilDisply(By.Id("drpYear"));
             }
-            else if (MainTab == AM_MainTab.Invetory)
+            else if (MainTab == AM_MainTab.Inventory)
             {
+
                 driver.FindElement(By.LinkText("Inventory")).Click();
                 Wait.AM_Loaging_ShowAndHide();
             }
@@ -41,7 +42,8 @@ namespace AdManagementT_Automation.Controls
             }
             else if (MainTab == AM_MainTab.Insertion_Orders)
             {
-
+                driver.FindElement(By.LinkText("Insertion Orders")).Click();
+                Wait.AM_Loaging_ShowAndHide();
             }
             else if (MainTab == AM_MainTab.Reports)
             {
@@ -74,6 +76,10 @@ namespace AdManagementT_Automation.Controls
                 //  Wait.UntilDisply(By.Id("drpApplication"));
                 Wait.AM_Loaging_ShowAndHide();
             }
+            if (aM_Sub_Order == AM_Sub_Insertion_Orders.All_Order) {
+                driver.FindElement(By.LinkText("All Orders")).Click();
+                Wait.AM_Loaging_ShowAndHide();
+            }
         }
         internal AM_MainTab GetActiveMainTab() {
             string Active = driver.FindElements(By.CssSelector("li[ng-repeat='menu in mainmenu']")).First(e => e.GetAttribute("class").Contains("active")).Text;
@@ -81,7 +87,7 @@ namespace AdManagementT_Automation.Controls
                 return AM_MainTab.Admin;
             }
             else if (Active == "Invetory") {
-                return AM_MainTab.Invetory;
+                return AM_MainTab.Inventory;
             }
             else if (Active == "Proposals")
             {
@@ -97,6 +103,15 @@ namespace AdManagementT_Automation.Controls
             }
             throw new Exception("Unable to identify selected main tab.");
            
+        }
+
+        internal void Switch(AM_Sub_Inventory aM_Sub_Inventory)
+        {
+            this.Switch(AM_MainTab.Inventory);
+            if (aM_Sub_Inventory == AM_Sub_Inventory.Wait_List) {
+                driver.FindElement(By.LinkText("Wait List")).Click();
+                Wait.AM_Loaging_ShowAndHide();
+            }
         }
     }
 }

@@ -16,4 +16,11 @@ namespace AddManagmentData.Model
         public IList<string>  SearchTerms { get; set; }
         public bool IncludeSubCat { get; set; }
     }
+   public class PropsalModel : InventoryModel {
+       public string MemberId { get; set; }
+       public string Contact { get; set; }
+       public string SalesRep { get; set; }
+       public string ProposalName { get; set; }
+       public DateTime ProposalDate { get; set; }
+   }
 }
