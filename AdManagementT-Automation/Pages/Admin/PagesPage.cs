@@ -11,6 +11,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data.SqlClient;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace AdManagementT_Automation.Pages.Admin
 {
@@ -93,7 +95,7 @@ namespace AdManagementT_Automation.Pages.Admin
         {
             IList<string> msg = Wait.UntilToastMessageShow();
 
-            if (msg.Any(e=>e== "Saved successfully"))
+            if (msg.Any(e => e == "Saved successfully" || e == "Updated successfully"))
             {
                 Logger.Log(LogingType.Success, "Page Saved successfully");
                 Wait.AM_Loaging_ShowAndHide();
@@ -130,9 +132,17 @@ namespace AdManagementT_Automation.Pages.Admin
         internal PagesPage SearchPage(PageModel pageModel)
         {
             IList<IWebElement> FilterControlList = this.GetFilterControlList();
-            IWebElement PageNameInput = FilterControlList[1].FindElement(By.TagName("input"));
-            PageNameInput.Clear();
-            PageNameInput.SendKeys(pageModel.GenratedPageName);
+            if (pageModel.GenratedPageName!=null)
+            {
+                IWebElement PageNameInput = FilterControlList[1].FindElement(By.TagName("input"));
+                PageNameInput.Clear();
+                PageNameInput.SendKeys(pageModel.GenratedPageName); 
+            }
+            if (pageModel.Category != null) {
+                IWebElement CatInput = FilterControlList[0].FindElement(By.TagName("input"));
+                CatInput.Clear();
+                CatInput.SendKeys(pageModel.Category); 
+            }
             Wait.AM_Loaging_ShowAndHide();
 
             return this;
@@ -140,20 +150,20 @@ namespace AdManagementT_Automation.Pages.Admin
 
         internal void AddAddionalKeyWordsinPage(PageModel pageModel)
         {
-            IWebElement ResultRow = this.GetMatchedRowFromFilteredData(pageModel);
-            ResultRow.Click();
+            var jList = this.GetResultSetRows();
+            IWebElement ResultRow = jList[0];
+            ResultRow.FindElements(By.TagName("td"))[1].Click();
             Wait.UntilDisply(SubCategorySelect);
             Select.ByFreeKeyWords(KeyWordsControl, pageModel.AdditionalKeyWords);
             this.SavePage();
-           // this.VerifySavePage();
             this.VerifyAddionalKeyWords(pageModel);
 
         }
 
         private void VerifyAddionalKeyWords(PageModel pageModel)
         {
-            this.SearchPage(pageModel);
-            IWebElement ResultRow = this.GetMatchedRowFromFilteredData(pageModel);
+            //this.SearchPage(pageModel);
+            IWebElement ResultRow = this.GetResultSetRows()[0];//this.GetMatchedRowFromFilteredData(pageModel);
             IList<string> KeyWordsList = this.GetKeyWordsListFromPage(ResultRow);
             var Result = KeyWordsList.Where(e => pageModel.AdditionalKeyWords.Any(x => x == e)).ToList();
             if (Result.Count == pageModel.AdditionalKeyWords.Count)
@@ -169,36 +179,34 @@ namespace AdManagementT_Automation.Pages.Admin
 
         private IList<string> GetKeyWordsListFromPage(IWebElement ResultRow)
         {
-            return ResultRow.FindElements(By.TagName("td"))[3].Text.Split(',');
+            return ResultRow.FindElements(By.TagName("td"))[2].Text.Split(',');
 
         }
         public void DeletePage(PageModel mypage)
         {
-            this.SearchPage(mypage);
-            IWebElement ResultRow = this.GetMatchedRowFromFilteredData(mypage);
+            //this.SearchPage(mypage);
+            IWebElement ResultRow = this.GetResultSetRows()[0];
             ResultRow.FindElement(By.LinkText("Delete")).Click();
             Wait.MLSeconds(100);
-            Alert.ClickOK();
-
-            Wait.AM_Loaging_ShowAndHide();
+            Modal.CommonclickYes();
             this.VerifyDeletePage(mypage);
         }
 
         private void VerifyDeletePage(PageModel mypage)
         {
-            this.SearchPage(mypage);
-            try
-            {
 
-                IWebElement Row = this.GetMatchedRowFromFilteredData(mypage);
-                Logger.Log(LogingType.TextCaseFail, "Unable To Delete Product");
+            IList<string> msg = Wait.UntilToastMessageShow();
+
+            if (msg.Any(e => e == "Deleted successfully"))
+            {
+                Logger.Log(LogingType.Success, "Deleted successfully");
+                Wait.AM_Loaging_ShowAndHide();
+            }
+            else
+            {
+                Logger.Log(LogingType.TextCaseFail, "unable to delete product");
                 throw new Exception();
             }
-            catch (Exception ex)
-            {
-                Logger.Log(LogingType.TextCaseFail, "Product Deleted Successfully");
-            }
-
         }
 
         private IWebElement GetMatchedRowFromFilteredData(PageModel pageModel)
@@ -209,40 +217,37 @@ namespace AdManagementT_Automation.Pages.Admin
 
         private IList<IWebElement> GetResultSetRows()
         {
-            return this.PagesResultGrid.FindElement(By.CssSelector("tr[ng-show='show_filter']")).FindElements(By.TagName("th"));
+            return this.PagesResultGrid.FindElements(By.CssSelector("tr[data-ng-repeat='page in $data']"));
         }
 
         private IList<IWebElement> GetFilterControlList()
         {
 
-            return this.PagesResultGrid.FindElement(By.TagName("tbody")).FindElements(By.CssSelector("tr[data-ng-repeat='page in $data']"));
+            return this.PagesResultGrid.FindElement(By.CssSelector("thead")).FindElements(By.TagName("tr"))[1].FindElements(By.TagName("th"));
         }
 
         internal void ActivePage(PageModel pageModel)
         {
             this.ChageStatusFilter("Inactive");
-            this.SearchPage(pageModel);
-            IWebElement Row = this.GetMatchedRowFromFilteredData(pageModel);
+            IWebElement Row = this.GetResultSetRows()[0];
             Row.FindElement(By.LinkText("Make Active")).Click();
             Wait.MLSeconds(100);
-            Alert.ClickOK();
-            Wait.AM_Loaging_ShowAndHide();
+            Modal.CommonclickYes();
             this.VerifyActivePage(pageModel);
         }
 
         private void VerifyActivePage(PageModel pageModel)
         {
-            this.ChageStatusFilter("Active");
-            this.SearchPage(pageModel);
-            try
-            {
-                this.GetMatchedRowFromFilteredData(pageModel);
 
-            }
-            catch (Exception)
+            IList<string> msg = Wait.UntilToastMessageShow();
+
+            if (msg.Any(e => e == "Activated successfully"))
             {
-                
-                throw;
+                Logger.Log(LogingType.Success, "Page Active successfully");
+                Wait.AM_Loaging_ShowAndHide();
+            }
+            else {
+                Assert.Fail("Unable to activate the Page");
             }
         }
 
@@ -251,6 +256,39 @@ namespace AdManagementT_Automation.Pages.Admin
             IList<IWebElement> filterList = this.GetFilterControlList();
             IWebElement SelectEle = filterList[6].FindElement(By.TagName("select"));
             Select.ByText(SelectEle, b);
+            Wait.AM_Loaging_ShowAndHide();
         }
+        public void VerifyAdminTabNotThere()
+        {
+            Element.NotExist(By.LinkText("Admin"));
+        }
+
+        internal PagesPage SortLatestRecords()
+        {
+            var Row=this.GetSortRow()[5];
+            Element.SetSortOrder(Row, SortOrder.Descending);
+            return this;
+        }
+
+        private IList<IWebElement> GetSortRow()
+        {
+            return this.PagesResultGrid.FindElement(By.TagName("thead")).FindElements(By.TagName("tr"))[0].FindElements(By.TagName("th"));
+
+        }
+
+        internal void DeleteAddionalKeyWordsinPage(PageModel Data)
+        {
+            var jList = this.GetResultSetRows();
+            IWebElement ResultRow = jList[0];
+            ResultRow.FindElements(By.TagName("td"))[1].Click();
+            Wait.UntilDisply(SubCategorySelect);
+            KeyWordsControl.FindElements(By.TagName("li"))[KeyWordsControl.FindElements(By.TagName("li")).Count-1].FindElement(By.TagName("a")).Click();
+            Wait.MLSeconds(1000);
+            //Select.ByFreeKeyWords(KeyWordsControl, Data.AdditionalKeyWords);
+            this.SavePage();
+            //SaveBtn.Click();
+            //this.VerifyAddionalKeyWords(Data);
+        }
+
     }
 }

@@ -4,6 +4,7 @@ using SeleniumExtension.Driver;
 using SeleniumExtension.Utilties;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -88,7 +89,7 @@ namespace SeleniumExtension.Controls
                 //  ((IJavaScriptExecutor)driver).ExecuteScript("window.scrollTo(" + x + "," + y + ");");
 
                 Actions actions = new Actions(driver);
-                actions.MoveByOffset(0,0);
+                actions.MoveByOffset(0, 0);
                 //actions.click();
                 actions.Perform();
                 Wait.Second(1);
@@ -128,7 +129,8 @@ namespace SeleniumExtension.Controls
 
         public static void syncCheckBox(bool p, IWebElement IncludeSubCatInput)
         {
-            if (IncludeSubCatInput.Selected != p) {
+            if (IncludeSubCatInput.Selected != p)
+            {
                 IncludeSubCatInput.Click();
             }
         }
@@ -152,9 +154,9 @@ namespace SeleniumExtension.Controls
                 }
                 catch (Exception ex)
                 {
-                   // return null;
+                    // return null;
 
-                } 
+                }
             }
             return null;
         }
@@ -162,12 +164,13 @@ namespace SeleniumExtension.Controls
 
         internal static IWebElement GetParent(IWebElement CategoryField)
         {
-          return  CategoryField.FindElement(By.XPath(".."));
+            return CategoryField.FindElement(By.XPath(".."));
         }
 
-        internal static IWebElement FindByTagAndTextInContainer(IWebElement dialog,string Text,string Tag)
+        internal static IWebElement FindByTagAndTextInContainer(IWebElement dialog, string Text, string Tag)
         {
-          return  dialog.FindElements(By.TagName(Tag)).First(e => e.Text == Text);
+
+            return dialog.FindElements(By.TagName(Tag)).First(e => e.Text == Text);
         }
 
 
@@ -176,6 +179,88 @@ namespace SeleniumExtension.Controls
             IWebDriver driver = SDriver.Browser;
             Actions builder = new Actions(driver);
             builder.MoveToElement(Ele).Perform();
+        }
+
+        public static IWebElement GetPerent(IWebElement webElement)
+        {
+            return webElement.FindElement(By.XPath(".."));
+        }
+
+        public static bool HasClass(IWebElement webElement, string classname)
+        {
+            return webElement.GetAttribute("class").Split(' ').Any(e => e == classname);
+        }
+
+
+        public static void ClearAllFields(System.Collections.ObjectModel.ReadOnlyCollection<IWebElement> readOnlyCollection)
+        {
+            foreach (var item in readOnlyCollection)
+            {
+                try
+                {
+                    item.Clear();
+                }
+                catch (Exception)
+                {
+                    
+                }
+            }
+        }
+
+        public static void NotExist(By by)
+        {
+            IWebDriver driver = SDriver.Browser;
+            try
+            {
+
+                driver.FindElement(by);
+                throw new Exception("Element exists");
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        public static void NotExist(IWebElement RenewalBtn)
+        {
+            IWebDriver driver = SDriver.Browser;
+            try
+            {
+
+                RenewalBtn.Click();
+                throw new Exception("Element exists");
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        public static void SetSortOrder(IWebElement Row, SortOrder ASC)
+        {
+
+            //var SorOrder = Row.GetAttribute("Class").Split(' ').First(e => e.Contains("sort-"));
+            Row.Click();
+            Wait.AM_Loaging_ShowAndHide();
+            if (ASC == SortOrder.Ascending)
+            {
+
+                while (Row.GetAttribute("Class").Split(' ').First(e => e.Contains("sort-")) != "sort-asc")
+                {
+                    Row.Click();
+                    Wait.AM_Loaging_ShowAndHide();
+                }
+
+            }
+            else if (ASC == SortOrder.Descending)
+            {
+                while (Row.GetAttribute("Class").Split(' ').First(e => e.Contains("sort-")) != "sort-desc")
+                {
+                    Row.Click();
+                    Wait.AM_Loaging_ShowAndHide();
+                }
+            
+            
+            }
         }
     }
 }

@@ -14,14 +14,28 @@ namespace SeleniumExtension.Utilties
    public class FileHandler
     {
         public static void BerforeDownLoadNotification()
-        {
-            Directory.CreateDirectory(Config.DefaultFileDownloadPath);
-            System.IO.DirectoryInfo di = new DirectoryInfo(Config.DefaultFileDownloadPath);
+       {
+           try
+           {
 
-            foreach (FileInfo file in di.GetFiles())
-            {
-                file.Delete();
-            }
+               Directory.CreateDirectory(Config.DefaultFileDownloadPath);
+               System.IO.DirectoryInfo di = new DirectoryInfo(Config.DefaultFileDownloadPath);
+
+               foreach (FileInfo file in di.GetFiles())
+               {
+                   try
+                   {
+                       file.Delete();
+                   }
+                   catch (Exception)
+                   {
+
+                   }
+               }
+           }
+           catch (Exception)
+           {
+           }
         }
         public static bool FileDownloaded()
         {
@@ -29,7 +43,7 @@ namespace SeleniumExtension.Utilties
 
             foreach (FileInfo file in di.GetFiles())
             {
-                if (file.Extension.ToString() != ".crdownload")
+                if (file.Extension.ToString() != ".crdownload" && file.Extension.ToString() != ".tmp")
                 {
                     return true;
                 }
@@ -67,13 +81,6 @@ namespace SeleniumExtension.Utilties
                 {
                     if (file.Extension == ".xlsx" || file.Extension == ".xls" || file.Extension == ".csv")
                     {
-                        //if (file.Extension == ".xls")
-                        //{
-                        //  // string result= Path.ChangeExtension(file.FullName, ".csv");
-                        //    string result=Path.ChangeExtension(file.FullName, ".csv");
-                        //    File.Move(file.FullName, Path.ChangeExtension(file.FullName, ".csv"));
-                        //    return result;
-                        //}
                         return file.FullName;
                     }
                 }

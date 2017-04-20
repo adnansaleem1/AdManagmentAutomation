@@ -11,6 +11,8 @@ using AdManagementT_Automation.Pages.Insertion_Orders;
 using AdManagementT_Automation.Pages.Adevertisements;
 using AdManagementT_Automation.Pages.Inventory;
 using AdManagementT_Automation.Pages.Admin;
+using AdManagementT_Automation.Pages.Reports;
+using AdManagementT_Automation.Pages.Proposals;
 
 namespace AdManagementT_Automation.Base
 {
@@ -30,8 +32,13 @@ namespace AdManagementT_Automation.Base
         public static EditOrderLinePage EditOrderLine { get { return PagesRepo.GetPage<EditOrderLinePage>(); } }
         public static AdvertisementPage Advertisement { get { return PagesRepo.GetPage<AdvertisementPage>(); } }
         public static InventoryPage Inventory { get { return PagesRepo.GetPage<InventoryPage>(); } }
+        public static CreateProposalPage CreatePropsal { get { return PagesRepo.GetPage<CreateProposalPage>(); } }       
         public static PagesPage adminpages { get { return PagesRepo.GetPage<PagesPage>(); } }
         public static WaitListPage Waitlistpage { get { return PagesRepo.GetPage<WaitListPage>(); } }
+        public static SimulateSearchPage SimulateSearchPage { get { return PagesRepo.GetPage<SimulateSearchPage>(); } }
+        public static AllProposalsPage AllProposalPage { get { return PagesRepo.GetPage<AllProposalsPage>(); } }
+        public static Reports Reports { get { return PagesRepo.GetPage<Reports>(); } }
+        public static AdGroupPage AdGropPage { get { return PagesRepo.GetPage<AdGroupPage>(); } }
 
     }
 }

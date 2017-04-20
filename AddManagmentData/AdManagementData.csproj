@@ -63,6 +63,7 @@
     <Compile Include="Data\OrderData.cs" />
     <Compile Include="Data\OrderLineData.cs" />
     <Compile Include="Data\PagesData.cs" />
+    <Compile Include="Data\WaitListData.cs" />
     <Compile Include="Model\AddUser.cs" />
     <Compile Include="Model\AdGroupModel.cs" />
     <Compile Include="Model\Admin\PageModel.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="Model\CreateProposal.cs" />
     <Compile Include="Model\InventoryModel.cs" />
     <Compile Include="Model\OrderLineModel.cs" />
+    <Compile Include="Model\WaitListModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

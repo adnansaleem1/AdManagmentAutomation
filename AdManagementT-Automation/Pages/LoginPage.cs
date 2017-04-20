@@ -39,6 +39,8 @@ namespace AdManagementT_Automation.Pages
         [FindsBy(How = How.Id, Using = "txtAsiNum")]
         public IWebElement AsiNumber { get; set; }
         
+        [FindsBy(How = How.ClassName, Using = "user")]
+        public IWebElement user { get; set; }
 
         [FindsBy(How = How.CssSelector, Using = "input[value='Login']")]
         public IWebElement Submit { get; set; }
@@ -76,6 +78,25 @@ namespace AdManagementT_Automation.Pages
             Select.ByText(AppCat, p);
             GoBtn.Click();
             Wait.AM_Loaging_ShowAndHide();
+        }
+
+        public void LogOut()
+        {
+            user.FindElement(By.TagName("a")).Click();
+            Wait.MLSeconds(100);
+            user.FindElement(By.CssSelector("li[onclick='sessionStorage.clear();']")).Click();
+            Wait.UntilDisply(Submit);
+        }
+
+        internal bool LoginVerification(AddUser addUser)
+        {
+            if (driver.Url.ToLower().Contains("/login?") || driver.Url == "data:,")
+            {
+                return false;
+            }
+            else {
+                return true;
+            }
         }
     }
 }

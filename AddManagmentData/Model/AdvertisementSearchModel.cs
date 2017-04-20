@@ -18,5 +18,8 @@ namespace AddManagmentData.Model
         public int? Month { get; set; }
         public IList<string> Rates { get; set; }
         public string SearchField { get; set; }
+        public IList<string> ProductGroup { get; set; }
+        public IList<string> AddType { get; set; }
+    
     }
 }

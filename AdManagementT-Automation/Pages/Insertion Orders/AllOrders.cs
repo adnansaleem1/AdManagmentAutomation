@@ -3,6 +3,7 @@ using AdManagementT_Automation.Controls;
 using AdManagementT_Automation.Ref;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
+using SeleniumExtension.Controls;
 using SeleniumExtension.Utilties;
 using System;
 using System.Collections.Generic;
@@ -18,25 +19,38 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
         [FindsBy(How = How.CssSelector, Using = "tr[ng-show='show_filter']")]
         private IWebElement OrderFilterParent { get; set; }
 
+        [FindsBy(How = How.CssSelector, Using = "button[data-ng-click='::manageRenewal()']")]
+        private IWebElement RenewalBtn { get; set; }
+
+
+
         [FindsBy(How = How.TagName, Using = "tbody")]
         private IWebElement OrderResultGridParent { get; set; }
 
+        [FindsBy(How = How.Id, Using = "drpYear")]
+        private IWebElement FilterYearDD { get; set; }
+
+        [FindsBy(How = How.Id, Using = "div[data-ng-modal='TotalCost']")]
+        private IWebElement TotalAmmount { get; set; }
+        
 
         [FindsBy(How = How.ClassName, Using = "results-bar")]
         private IWebElement ResultBar { get; set; }
-        
+
 
         public AllOrdersPage Navigate()
         {
-            PagesRepo.AddTabs.Switch(AM_MainTab.Insertion_Orders);
+            PagesRepo.AddTabs.Switch(AM_Sub_Insertion_Orders.All_Order);
             return this;
         }
         public AllOrdersPage SelectGivenOrderByID(string id)
         {
             var Order = this.SearchOrder(id);
-            if (Order == null) {
+            if (Order == null)
+            {
                 throw new Exception("No Order Find With given Id.");
             }
+            Wait.IfLoadingIsStillVisible();
             Order.Click();
             Wait.AM_Loaging_ShowAndHide();
 
@@ -45,21 +59,26 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
         private IWebElement SearchOrder(string Id = "", string CompanyName = "")
         {
             var Filter = OrderFilterParent.FindElements(By.TagName("input"));
+            bool Filtered=false;
             if (Id == "" && CompanyName == "")
             {
                 throw new Exception("Atlest one Paramitter must be Given to Search Order");
             }
-            if (Id != "")
+            if (Id != "" && Filter[0].Text != Id)
             {
+                Filtered = true;
                 Filter[0].Clear();
                 Filter[0].SendKeys(Id);
             }
-            if (CompanyName != "")
+            if (CompanyName != "" && Filter[1].Text!=CompanyName)
             {
+                Filtered = true;
                 Filter[1].Clear();
                 Filter[1].SendKeys(CompanyName);
             }
-            Wait.Second(1);
+            if (Filtered) {
+                Wait.AM_Loaging_ShowAndHide_WithWait(2);
+            }
             var ResultList = OrderResultGridParent.FindElements(By.TagName("tr"));
 
             //for (var count = 0; count < ResultList.Count - 1; count++) { 
@@ -71,13 +90,14 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
 
         internal double GetSuspandedAdAmmount()
         {
-            string suspanded =ResultBar.FindElements(By.ClassName("results-group"))[3].Text;
+            string suspanded = ResultBar.FindElements(By.ClassName("results-group"))[3].Text;
             suspanded = suspanded.Trim();
-            if ( suspanded == "")
+            if (suspanded == "")
             {
                 return 0;
             }
-            else {
+            else
+            {
                 suspanded = suspanded.Replace("Suspended :", "");
                 suspanded = suspanded.Trim();
                 return Double.Parse(suspanded, System.Globalization.NumberStyles.Currency);
@@ -110,7 +130,7 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
             }
             else
             {
-                Active=Active.Replace("Active:","");
+                Active = Active.Replace("Active:", "");
                 Active = Active.Trim();
                 return Double.Parse(Active, System.Globalization.NumberStyles.Currency);
             }
@@ -118,26 +138,59 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
 
         internal double GetTotalAdAmmount()
         {
-             string Total = ResultBar.FindElements(By.ClassName("results-group"))[0].Text;
-             Total = Total.Trim();
-             if (Total == "")
+            String Active = ResultBar.FindElements(By.ClassName("results-group"))[0].Text;
+            Active = Active.Trim();
+            if (Active == "")
             {
                 return 0;
             }
             else
             {
-                Total = Total.Replace("Total:", "");
+                Active = Active.Replace("Total:", "");
+                Active = Active.Trim();
+                return Double.Parse(Active, System.Globalization.NumberStyles.Currency);
+            }
+
+        }
+
+        internal double GetactiveAdAmmount_OrderLine()
+        {
+            String Active = ResultBar.FindElements(By.ClassName("results-group"))[0].Text;
+            Active = Active.Trim();
+            if (Active == "")
+            {
+                return 0;
+            }
+            else
+            {
+                Active = Active.Replace("Active:", "");
+                Active = Active.Trim();
+                return Double.Parse(Active, System.Globalization.NumberStyles.Currency);
+            }
+        }
+
+        internal double GetTotalAdAmmount_OrderLine()
+        {
+            string Total = TotalAmmount.Text;
+            Total = Total.Trim();
+            if (Total == "")
+            {
+                return 0;
+            }
+            else
+            {
                 Total = Total.Trim();
                 return Double.Parse(Total, System.Globalization.NumberStyles.Currency);
             }
         }
 
-        internal void ClearFilter()
+        internal AllOrdersPage ClearFilter()
         {
             try
             {
                 var Filters = OrderFilterParent.FindElements(By.TagName("input"));
-                foreach (var item in Filters) {
+                foreach (var item in Filters)
+                {
                     item.Clear();
                 }
                 Wait.AM_Loaging_ShowAndHide();
@@ -146,6 +199,26 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
             {
 
             }
+            return this;
+        }
+
+        internal void RenewalButtonShouldNotBeThere()
+        {
+            Element.NotExist(RenewalBtn);
+        }
+
+        internal void SetFutureYearFilter()
+        {
+            Select.ByText(FilterYearDD, (DateTime.Now.Year + 1).ToString());
+            Wait.AM_Loaging_ShowAndHide();
+            if (OrderResultGridParent.FindElements(By.TagName("tr"))[0].FindElement(By.TagName("input")).Enabled)
+            {
+                Select.ByText(FilterYearDD, DateTime.Now.Year.ToString());
+                Wait.AM_Loaging_ShowAndHide();
+                throw new Exception("Check box is Enabled for future year.");
+            }
+            Select.ByText(FilterYearDD, DateTime.Now.Year.ToString());
+            Wait.AM_Loaging_ShowAndHide();
         }
     }
 }

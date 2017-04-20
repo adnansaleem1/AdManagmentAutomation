@@ -68,6 +68,13 @@ namespace AdManagementT_Automation.Pages.Inventory
         [FindsBy(How = How.CssSelector, Using = "button[data-ng-click='sendNotification()']")]
         private IWebElement Notification_SendBtn { get; set; }
         
+        [FindsBy(How = How.CssSelector, Using = "button[data-ng-click='cancelWaitList()']")]
+        private IWebElement CancelWaitListBtn { get; set; }
+
+            [FindsBy(How = How.ClassName, Using = "dirtycheck-dialog")]
+        private IWebElement dirtyCheckDialog { get; set; }
+        
+
         public WaitListPage OpenNewWaitListPage()
         {
             AddnewWaitListBtn.Click();
@@ -79,6 +86,8 @@ namespace AdManagementT_Automation.Pages.Inventory
             if (Data.MemberId != "")
             {
                 Select.FromList(Data.MemberId, form_MemberIdField);
+                Wait.UntilLoading();
+                Wait.MLSeconds(1000);
             } if (!string.IsNullOrEmpty(Data.ProductGroup))
             {
                 Select.ByText(form_ProductgroupDD, Data.ProductGroup);
@@ -111,6 +120,11 @@ namespace AdManagementT_Automation.Pages.Inventory
             {
                 Select.ByText(form_coordinatorDD, Data.Coordinator);
             }
+            Wait.MLSeconds(200);
+            if (!string.IsNullOrEmpty(Data.AddType))
+            {
+                Select.ByText(form_AdTypeDD, Data.AddType);
+            }
             return this;
         }
         private void SelectSearchTerms(string searchTerms)
@@ -135,9 +149,18 @@ namespace AdManagementT_Automation.Pages.Inventory
             }
             else
             {
+                this.CancelWaitList();
                 Logger.Log(LogingType.TextCaseFail, result.ToString());
                 throw new Exception(result.ToString());
             }
+        }
+
+        private void CancelWaitList()
+        {
+            CancelWaitListBtn.Click();
+            Wait.MLSeconds(200);
+            Modal.ClickYes(dirtyCheckDialog);
+            Wait.MLSeconds(1000);
         }
         private void filterWaitList(WaitListModel Data)
         {

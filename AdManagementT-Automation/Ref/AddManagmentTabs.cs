@@ -10,8 +10,6 @@ namespace AdManagementT_Automation.Ref
    public enum AM_Sub_Inventory { Inventory,Wait_List }
    public  enum AM_Sub_Proposlas { All_Proposal, Create_Proposal }
    public enum AM_Sub_Insertion_Orders { All_Order, Create_Order,Edit_Order }
-   public enum AM_Sub_Admin { Pages,Rate_Cards,Redis,Audit,Renewal,AddGroups }
-
-
+   public enum AM_Sub_Admin { Pages,Rate_Cards,Simulate_Search,Redis,Audit,Renewal,AddGroups }
 
 }

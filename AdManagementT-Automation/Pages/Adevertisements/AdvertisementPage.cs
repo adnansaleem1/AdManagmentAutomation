@@ -1,6 +1,7 @@
 ﻿using AddManagmentData.Model;
 using AdManagementT_Automation.Base;
 using AdManagementT_Automation.Ref;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
 using SeleniumExtension.Controls;
@@ -62,8 +63,12 @@ namespace AdManagementT_Automation.Pages.Adevertisements
 
         [FindsBy(How = How.CssSelector, Using = "button[class='btn btn-default dropdown-toggle ng-binding']")]
         private IWebElement ChangeStatusDropDown { get; set; }
-        
-        
+
+        [FindsBy(How = How.CssSelector, Using = "div[selected-model='filterGroupSelectedValues']")]
+        private IWebElement ProductGroupControl { get; set; }
+
+        [FindsBy(How = How.CssSelector, Using = "div[selected-model='filterAdTypeSelectedValues']")]
+        private IWebElement AdTypeControl { get; set; }
 
 
         #endregion
@@ -75,13 +80,16 @@ namespace AdManagementT_Automation.Pages.Adevertisements
 
         private void TagBasedInput(IList<string> list, IWebElement Control)
         {
-            Element.ScrolTo(Control);
-            foreach (var item in list)
+            if (list!=null&&list.Count>0)
             {
-                Control.FindElement(By.TagName("input")).SendKeys(item);
-                Wait.UntilDisply(By.ClassName("autocomplete"));
-                Control.FindElement(By.TagName("input")).SendKeys(Keys.Enter);
-                Wait.MLSeconds(200);
+                Element.ScrolTo(Control);
+                foreach (var item in list)
+                {
+                    Control.FindElement(By.TagName("input")).SendKeys(item);
+                    Wait.UntilDisply(By.ClassName("autocomplete"));
+                    Control.FindElement(By.TagName("input")).SendKeys(Keys.Enter);
+                    Wait.MLSeconds(200);
+                } 
             }
 
         }
@@ -110,6 +118,7 @@ namespace AdManagementT_Automation.Pages.Adevertisements
         }
         private AdvertisementPage Search()
         {
+            Wait.MLSeconds(500);
             Searchbtn.Click();
             Wait.AM_Loaging_ShowAndHide();
             return this;
@@ -122,11 +131,17 @@ namespace AdManagementT_Automation.Pages.Adevertisements
         }
         private void FillEMemberID(string Data)
         {
-            MemberId.SendKeys(Data == null ? "" : Data);
+            if (Data != null)
+            {
+                Select.FromList(Data, MemberId);
+                Wait.IfLoadingIsStillVisible();
+            }
+           // MemberId.SendKeys(Data == null ? "" : Data);
         }
 
         public AdvertisementPage FillSearchParamitters(AdvertisementSearchModel Data)
         {
+            this.ClearFilter();
             FillEMemberID(Data.MemberID);
             Select.SelectFromMultipleControl(Data.Positions, PositionControl);
             this.TagBasedInput(Data.SearchTerms, SearchTermsControl);
@@ -137,6 +152,8 @@ namespace AdManagementT_Automation.Pages.Adevertisements
             Select.ByText(MonthDD, Data.Month.ToString());
             Select.SelectFromMultipleControl(Data.Rates, RateControl);
             FilterTextfield.SendKeys(Data.SearchField == null ? "" : Data.SearchField);
+            Select.SelectFromMultipleControl(Data.ProductGroup, ProductGroupControl);
+            Select.SelectFromMultipleControl(Data.AddType, AdTypeControl);
             this.Search();
             return this;
         }
@@ -156,7 +173,40 @@ namespace AdManagementT_Automation.Pages.Adevertisements
         {
             ChangeStatusDropDown.Click();
             Wait.MLSeconds(200);
+            driver.FindElement(By.LinkText(p)).Click();
+            this.VerifyChangeStatus();
             //drive
+        }
+
+        private void VerifyChangeStatus()
+        {
+            IList<string> result = Wait.UntilToastMessageShow();
+
+            if (result.Any(e => e.Contains("Status change failed for ids")))
+            {
+                Logger.Log(LogingType.TestCasePass, "Fail to change Status of Ad");
+                Assert.Fail("Fail to change Status of Ad");
+            }
+            else 
+            {
+
+                Logger.Log(LogingType.TestCasePass, "Ad Status Changed Successfully");
+
+            }  
+        }
+
+        public void ClearFilter() {
+            this.MemberId.Clear();
+            Wait.MLSeconds(100);
+            Select.SelectFromMultipleControl(new List<string>() { "Uncheck All" }, PositionControl);
+            Select.ClearTagBasedInput(SearchTermsControl);
+            Select.SelectFromMultipleControl(new List<string>() { "Uncheck All" }, SalesRepsControl);
+            Select.SelectFromMultipleControl(new List<string>() { "Uncheck All" }, AdStatusControl);
+            Select.SelectFromMultipleControl(new List<string>() { "Uncheck All" }, RateControl);
+            Select.SelectFromMultipleControl(new List<string>() { "Uncheck All" }, AdTypeControl);
+            Select.SelectFromMultipleControl(new List<string>() { "Uncheck All" }, ProductGroupControl);
+            
+            Wait.MLSeconds(200);
         }
         #endregion
 
@@ -286,10 +336,9 @@ namespace AdManagementT_Automation.Pages.Adevertisements
             }
         }
 
-
-
-
-
+        public void VerifyTabShouldNotBeThere() {
+            Element.NotExist(By.LinkText("Advertisements"));
+        }
         #endregion
 
 
@@ -308,16 +357,43 @@ namespace AdManagementT_Automation.Pages.Adevertisements
             string AddID, Status;
             this.FillSearchParamitters(advertisementSearchModel);
             this.Search();
-            IWebElement ResultRow = this.GetRowsOfGrid()[0];
-            Status = this.FindStatusFromResultRow(ResultRow);
-            AddID = this.FindAddIDFromResultRow(ResultRow);
-            this.SelectRow(ResultRow);
-            this.ChangeStatusofSelectedAds("Work In Progress");
+            if (this.GetRowsOfGrid().Count > 0)
+            {
+                IWebElement ResultRow = this.GetRowsOfGrid()[0];
+                Status = this.FindStatusFromResultRow(ResultRow);
+                AddID = this.FindAddIDFromResultRow(ResultRow);
+                this.SelectRow(ResultRow);
+                this.ChangeStatusofSelectedAds("Work In Progress");
+            }
+            else {
+                this.ClearFilter();
+                advertisementSearchModel.Statuses[0] = "Work In Progress";
+                this.FillSearchParamitters(advertisementSearchModel);
+                this.Search();
+                IWebElement ResultRow = this.GetRowsOfGrid()[0];
+                Status = this.FindStatusFromResultRow(ResultRow);
+                AddID = this.FindAddIDFromResultRow(ResultRow);
+                this.SelectRow(ResultRow);
+                this.ChangeStatusofSelectedAds("Active");
+            }
+           
         }
 
 
 
 
 
+
+        internal void VerifydisableCheckBox()
+        {
+            IList<IWebElement> Rows = GetRowsOfGrid();
+            if (Rows.Count > 0 && !Rows[0].FindElement(By.TagName("input")).Enabled)
+            {
+               
+            }
+            else {
+                Assert.Fail("Check Boxes are Active in Result"); 
+            }
+        }
     }
 }

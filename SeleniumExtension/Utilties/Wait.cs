@@ -23,7 +23,7 @@ namespace SeleniumExtension.Utilties
             int TimeToCalculate = 0;
             int loopWaitTime = 1;
             IWebDriver driver = SDriver.Browser;
-            while (Element.Dispaly(By.ClassName("blockOverlay")))
+            while (Element.Dispaly(By.ClassName("blockOverlay")) || Element.Dispaly(By.ClassName("block-ui-overlay")))
             {
                 // driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(Config.LoopTimeOutToCheckElement));
                 Thread.Sleep(loopWaitTime * 1000);
@@ -179,10 +179,9 @@ namespace SeleniumExtension.Utilties
             IReadOnlyList<IWebElement> ToastEle=driver.FindElements(By.ClassName("toast-message"));
             foreach (var item in ToastEle)
             {
-                msg.Add(item.Text);
                 try
                 {
-
+                    msg.Add(item.Text);
                     ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].style.visibility='hidden'", item);
                 }
                 catch (Exception)
@@ -211,16 +210,19 @@ namespace SeleniumExtension.Utilties
         }
         private static void InstantUntilDisply(By by)
         {
-            int MaxWaited = 30;
+            int MaxWaitedSec = 120;
             int TimeToCalculate = 0;
             int loopWaitTime = 0;
             IWebDriver driver = SDriver.Browser;
+            var starter = DateTime.Now;
             while (!Element.Dispaly(by))
             {
                 // driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(Config.LoopTimeOutToCheckElement));
+                var Diff = DateTime.Now-starter ;
+             
                 Thread.Sleep(loopWaitTime * 500);
                 TimeToCalculate += loopWaitTime;
-                if (MaxWaited <= TimeToCalculate)
+                if (MaxWaitedSec <= Diff.TotalSeconds)
                 {
                     break;
                     throw new Exception("Max Wait Reached for Element Search Wait");
@@ -233,6 +235,66 @@ namespace SeleniumExtension.Utilties
             IWebDriver driver = SDriver.Browser;
             WebDriverWait wait = new WebDriverWait(driver, new TimeSpan(10));
             wait.Until(ExpectedConditions.ElementToBeClickable(CreatePageBtn));
+        }
+
+        public static void UntilLoading(IList<IWebElement> TableRecords)
+        {
+            try
+            {
+                while (TableRecords.Count <= 0) ;
+            }
+            catch (Exception ex) { 
+            
+            }
+        }
+
+        public static void IfLoadingIsStillVisible()
+        {
+            var Loading = By.ClassName("block-ui-overlay");
+            if(Element.Dispaly(Loading)){
+                Wait.UntilHide(Loading);
+            }
+        }
+
+
+        internal static void WaitForOption(string option,IWebElement Ele)
+        {
+            IWebDriver driver = SDriver.Browser;
+
+            try
+            {
+                while (!Ele.FindElements(By.TagName("option")).Any(e => e.Text.ToLower() == option.ToLower())) ;
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        public static void AM_Loaging_ShowAndHide_WithWait(int p)
+        {
+            var Loading = By.ClassName("block-ui-overlay");
+            Wait.UntilDisply_WithMaxTime(Loading, p);
+            Wait.UntilHide(Loading);
+        }
+
+        private static void UntilDisply_WithMaxTime(By Loading,int time)
+        {
+            int MaxWaited = time;
+            int TimeToCalculate = 0;
+            int loopWaitTime = 1;
+            IWebDriver driver = SDriver.Browser;
+            while (!Element.Dispaly(Loading))
+            {
+                // driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(Config.LoopTimeOutToCheckElement));
+                Thread.Sleep(loopWaitTime * 500);
+                TimeToCalculate += loopWaitTime;
+                if (MaxWaited <= TimeToCalculate)
+                {
+                    break;
+                    throw new Exception("Max Wait Reached for Element Search Wait");
+                }
+            }
         }
     }
 }

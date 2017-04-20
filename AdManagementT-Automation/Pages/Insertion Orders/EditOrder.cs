@@ -28,7 +28,7 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
         [FindsBy(How = How.LinkText, Using = "Banner")]
         private IWebElement Banner { get; set; }
 
-        [FindsBy(How = How.CssSelector, Using = "table[data-ng-table='tableOrderLinesParams']")]
+        [FindsBy(How = How.TagName, Using = "table")]
         private IWebElement OrderLineGrid { get; set; }
 
         [FindsBy(How = How.CssSelector, Using = "div[data-ng-show='isEditMode && order.OrderStatus.Name == \\'Active\\'']")]
@@ -42,6 +42,10 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
 
         [FindsBy(How = How.ClassName, Using = "results-bar")]
         private IWebElement ResultBar { get; set; }
+
+        [FindsBy(How = How.CssSelector, Using = "a[data-ng-click='showGroups = false']")]
+        private IWebElement closeAdGroupBtn { get; set; }
+        
         
         #region Ad Group Elements
 
@@ -167,11 +171,7 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
         {
             try
             {
-                this.OpenAdGroupPanel();
-                IWebElement AdGroup;
-                IList<IWebElement> AddGroupList = AddGroupForm.FindElements(By.ClassName("box"));
-                // AdGroup=AddGroupList.FirstOrDefault(e => e.FindElement(By.CssSelector("div[style='word-wrap:break-word;font-weight:bold']")).Text.Contains(data.GroupName));
-                AdGroup = AddGroupList.FirstOrDefault(e => e.Text.Contains(data.GroupName));
+                IWebElement AdGroup = GetAddGroup(data);
 
                 if (AdGroup != null)
                 {
@@ -189,6 +189,16 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
             }
         }
 
+        public IWebElement GetAddGroup(AdGroupModel data)
+        {
+            this.OpenAdGroupPanel();
+            IWebElement AdGroup;
+            IList<IWebElement> AddGroupList = AddGroupForm.FindElements(By.ClassName("box"));
+            // AdGroup=AddGroupList.FirstOrDefault(e => e.FindElement(By.CssSelector("div[style='word-wrap:break-word;font-weight:bold']")).Text.Contains(data.GroupName));
+            AdGroup = AddGroupList.FirstOrDefault(e => e.Text.Contains(data.GroupName));
+            return AdGroup;
+        }
+
         private void OpenAdGroupPanel()
         {
 
@@ -196,9 +206,25 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
             //  {
             AdGroupBtn.Click();
             Wait.UntilDisply(AdGroupPanel);
+            Wait.Second(1);
             // }
         }
+        public void CloseAdGroupPanel()
+        {
+            try
+            {
 
+                //if (!CreateAddGroupBtn.Enabled)
+                //  {
+                closeAdGroupBtn.Click();
+                Wait.Second(1);
+                // }
+            }
+            catch (Exception)
+            {
+
+            }
+        }
         public bool CreateNewAddGroup(AdGroupModel data)
         {
             //this.OpenAdGroupPanel();
@@ -310,6 +336,8 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
         public void AddNewOrderLine(string lineType)
         {
             Element.ScrolTo(AddOrderLineBtn);
+            Wait.MLSeconds(500);
+            Wait.UntilClickAble(AddOrderLineBtn);
             AddOrderLineBtn.Click();
             Wait.MLSeconds(500);
             if (lineType == "PFP")
@@ -487,6 +515,17 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
         {
             while (this.DeleteResultBannerIfAlreadyExists(OrderLineposData)) ;
             //this.ClearFilter();
+        }
+
+        internal void OpenFirstOrderLine()
+        {
+            this.ClearFilter();
+            Wait.MLSeconds(500);
+            Wait.IfLoadingIsStillVisible();
+            var row = OrderLineGrid.FindElement(By.TagName("tbody")).FindElements(By.TagName("tr"))[0];
+            Element.ScrolTo(row);
+            row.Click();
+            Wait.AM_Loaging_ShowAndHide();
         }
     }
 }

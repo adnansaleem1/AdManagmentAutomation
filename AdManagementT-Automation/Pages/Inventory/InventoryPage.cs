@@ -68,6 +68,9 @@ namespace AdManagementT_Automation.Pages.Inventory
         [FindsBy(How = How.CssSelector, Using = "button[data-ng-click='saveProposal(amFormProposalDetail.$valid, \\'save\\');']")]
         private IWebElement SaveProposalBtn { get; set; }
 
+        [FindsBy(How = How.CssSelector, Using = "span[ng-bind='$getDisplayText()']")]
+        private IList<IWebElement> FilterText { get; set; }
+        
 
         public InventoryPage Navigate()
         {
@@ -77,6 +80,7 @@ namespace AdManagementT_Automation.Pages.Inventory
 
         internal InventoryPage FillSearch(AddManagmentData.Model.InventoryModel inventory)
         {
+        
             if (string.IsNullOrEmpty(inventory.InventoryType))
             {
                 this.SelectInventoryType(inventory.InventoryType);
@@ -99,6 +103,8 @@ namespace AdManagementT_Automation.Pages.Inventory
             }
             if (inventory.SearchTerms.Count > 0)
             {
+                Wait.MLSeconds(200);
+                Select.ClearTagBasedInput(searchTermsControl);
                 Select.TagBasedInput(inventory.SearchTerms, searchTermsControl);
             }
             Element.syncCheckBox(inventory.IncludeSubCat, SubCatagoriesCheckbox);
@@ -108,7 +114,8 @@ namespace AdManagementT_Automation.Pages.Inventory
 
         internal InventoryPage Search()
         {
-
+            Wait.MLSeconds(200);
+            Wait.UntilClickAble(SearchBtn);
             SearchBtn.Click();
             Wait.AM_Loaging_ShowAndHide();
             return this;
@@ -184,18 +191,18 @@ namespace AdManagementT_Automation.Pages.Inventory
             ProposalNameField.SendKeys(Data.ProposalName);
             Wait.MLSeconds(100);
         }
-
+        
 
         internal int GetPositionInventory(int pos, string Data)
-
         {
-            int basepos=5;
+            int basepos = 5;
             IWebElement ResultRow = this.GetResultFromSearch(Data);
             if (ResultRow != null)
             {
                 return int.Parse(ResultRow.FindElements(By.TagName("td"))[basepos + pos].Text.Trim());
             }
-            else {
+            else
+            {
 
                 throw new Exception("Unable to found Serach term");
             }
@@ -208,6 +215,56 @@ namespace AdManagementT_Automation.Pages.Inventory
             driver.FindElement(By.LinkText(p)).Click();
             Wait.AM_Loaging_ShowAndHide();
             return this;
+        }
+
+        internal void VerifySearchResultWithoutSubTerms(string p)
+        {
+            IList<IWebElement> ResultList = this.GetResultRows();
+            var Count = ResultList.Count(e => e.FindElement(By.CssSelector("td[data-title-text='Search Term']")).Text.Contains(p + "/"));
+            if (Count > 0)
+            {
+                Logger.Log(LogingType.TextCaseFail, "Inventory Search Result contain sub categories.");
+                throw new Exception("Inventory Search Result contain sub categories.");
+            }
+            else
+            {
+                Logger.Log(LogingType.TestCasePass, "Inventory Search Result does not contain sub categories.");
+            }
+
+        }
+
+
+
+
+        internal string ChangeSortOrder(int ColNo)
+        {
+            var Cols = ResultGrid.FindElement(By.TagName("thead")).FindElements(By.TagName("tr"))[0].FindElements(By.TagName("th"));
+            Cols[ColNo].Click();
+            Wait.AM_Loaging_ShowAndHide();
+            return this.GetSortOnCol(ColNo);
+        }
+
+        internal string GetSortOnCol(int ColNo)
+        {
+
+            var Cols = ResultGrid.FindElement(By.TagName("thead")).FindElements(By.TagName("tr"))[0].FindElements(By.TagName("th"));
+            return Cols[ColNo].GetAttribute("class").Split(' ').FirstOrDefault(e => e.Contains("sort-"));
+        }
+
+        internal void VerfiySearchRetain(InventoryModel Data)
+        {
+
+            if (Data.SearchTerms[0].ToLower() != FilterText[0].Text.ToLower()) {
+                throw new Exception("System was unable to retain filter information");
+            }
+        }
+
+        internal void VerfiySearchNotRetain(InventoryModel Data)
+        {
+            if (FilterText.Count>0)
+            {
+                throw new Exception("System was retaining filter information.");
+            }
         }
     }
 }

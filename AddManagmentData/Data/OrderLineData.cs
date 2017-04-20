@@ -30,12 +30,38 @@ namespace AddManagmentData.Data
                     SearchLeadingTextAllow = true,
                     Priority = 10,
                     ProductSelectionManual = true,
+                    ProductId_ManualSelection = new List<string>() { "5625470" },
                     ProductId_ManualSelectionList = new List<string>() { "5625470" },
                     Status = "Active"
                 };
             }
         }
 
+        public static OrderLineModel AutoSelection
+        {
+            get
+            {
+                return new OrderLineModel()
+                {
+                    ProductGroup = "ESP",
+                    AddType = "PFP",
+                    Position = 4,
+                    SearchTerm = "PENS",
+                    DeliveryPreferences = "Standard",
+                    ProductInformation = "PENS",
+                    Impressions = 20,
+                    GeoTargetEnable = false,
+                    KeyWordsEnable = true,
+                    CatogoriesEnable = true,
+                    SubsitutionsAllow = true,
+                    DisplayMultipleAddsAllow = true,
+                    SearchLeadingTextAllow = true,
+                    Priority = 10,
+                    ProductSelectionManual = false,
+                    Status = "Active"
+                };
+            }
+        }
         public static OrderLineModel SaveAndAdd
         {
             get
@@ -75,7 +101,7 @@ namespace AddManagmentData.Data
                     SearchTerm = "PENS/ALUMINUM PENS",
                     DeliveryPreferences = "Buy Out",
                     ProductInformation = "PENS/ALUMINUM PENS",
-                   // Impressions = 20,
+                    // Impressions = 20,
                     GeoTargetEnable = false,
                     KeyWordsEnable = true,
                     CatogoriesEnable = true,
@@ -102,7 +128,7 @@ namespace AddManagmentData.Data
                     SearchTerm = "BAGS/BAGS-LUNCH",
                     DeliveryPreferences = "Buy Remnant",
                     ProductInformation = "BAGS/BAGS-LUNCH",
-                   // Impressions = 20,
+                    // Impressions = 20,
                     GeoTargetEnable = false,
                     KeyWordsEnable = true,
                     CatogoriesEnable = true,
@@ -129,7 +155,7 @@ namespace AddManagmentData.Data
                     SearchTerm = "BAGS/BAGS-FOOD",
                     DeliveryPreferences = "Buy Remaining",
                     ProductInformation = "BAGS/BAGS-FOOD",
-                   // Impressions = 20,
+                    // Impressions = 20,
                     GeoTargetEnable = false,
                     KeyWordsEnable = true,
                     CatogoriesEnable = true,
@@ -154,7 +180,7 @@ namespace AddManagmentData.Data
                     SearchTerm = "BAGS/BEACH BAGS",
                     DeliveryPreferences = "Buy Out",
                     ProductInformation = "BAGS/BEACH BAGS",
-                   // Impressions = 20,
+                    // Impressions = 20,
                     GeoTargetEnable = false,
                     KeyWordsEnable = true,
                     CatogoriesEnable = true,
@@ -180,7 +206,7 @@ namespace AddManagmentData.Data
                     SearchTerm = "BAGS/BAGS-RESEALABLE/RECLOSABLE",
                     //DeliveryPreferences = "Buy Out",
                     ProductInformation = "BAGS/BAGS-RESEALABLE/RECLOSABLE",
-                   // Impressions = 20,
+                    // Impressions = 20,
                     GeoTargetEnable = false,
                     KeyWordsEnable = true,
                     CatogoriesEnable = true,
@@ -194,7 +220,7 @@ namespace AddManagmentData.Data
                 };
             }
         }
-        
+
         public static OrderLineModel ESP_Website
         {
             get
@@ -222,14 +248,30 @@ namespace AddManagmentData.Data
             }
         }
 
-        
+
         public static OrderLineModel MultipleProductInManualSelection
         {
             get
             {
                 return new OrderLineModel()
                 {
-                    ProductId_ManualSelection = new List<string>() { "5625470", "550168664", "5848093", "" }
+                    ProductGroup = "ESP",
+                    AddType = "PFP",
+                    Position = 1,
+                    SearchTerm = "BAGS/BEACH BAGS",
+                    DeliveryPreferences = "Buy Out",
+                    ProductInformation = "BAGS/BEACH BAGS",
+                    // Impressions = 20,
+                    GeoTargetEnable = false,
+                    KeyWordsEnable = true,
+                    CatogoriesEnable = true,
+                    SubsitutionsAllow = true,
+                    DisplayMultipleAddsAllow = true,
+                    SearchLeadingTextAllow = true,
+                    ProductSelectionManual = true,
+                    ProductId_ManualSelection = new List<string>() { "5625470", "550168664", "5848093" },
+                    Priority = 10,
+                    Status = "Active"
                 };
             }
         }
@@ -244,7 +286,7 @@ namespace AddManagmentData.Data
                     SearchTerms = new List<string>() { "ENVIRONMENTALLY FRIENDLY PRODUCTS" },
                     IncludeSubCat = false,
                     Statuses = new List<string>() { "Active" },
-                    Rates = new List<string>() {"Supplier Rate Card" },
+                    Rates = new List<string>() { "Supplier Rate Card" },
                 };
             }
         }
@@ -269,8 +311,8 @@ namespace AddManagmentData.Data
                     DisplayMultipleAddsAllow = true,
                     SearchLeadingTextAllow = true,
                     ProductSelectionManual = true,
-                    EndDate=DateTime.Now,
-                    Cost=50,
+                    EndDate = DateTime.Now,
+                    Cost = 50,
                     ProductId_ManualSelection = new List<string>() { "5625470" },
                     Priority = 10,
                     Status = "Active"
@@ -309,6 +351,14 @@ namespace AddManagmentData.Data
         public static string ActiveOrderId = "88660";
         public static string CompleteOrderId = "80228";
         public static string SuspandedOrderId = "68915";
-
+        public static AdvertisementSearchModel ShellToFill
+        {
+            get
+            {
+                return new AdvertisementSearchModel()
+                {
+                };
+            }
+        }
     }
 }
