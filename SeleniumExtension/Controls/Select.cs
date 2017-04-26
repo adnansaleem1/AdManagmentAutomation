@@ -21,6 +21,7 @@ namespace SeleniumExtension.Controls
                 SelectElement Select = new SelectElement(ele);
                 Wait.WaitForOption(option,ele);
                 Select.SelectByText(option);
+                
             }
         }
         public static void SelectFromMultipleControl(IList<int> list, IWebElement Control)
