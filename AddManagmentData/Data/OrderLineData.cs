@@ -349,7 +349,7 @@ namespace AddManagmentData.Data
         public static string OrderId = "88660";
 
         public static string ActiveOrderId = "88660";
-        public static string CompleteOrderId = "80228";
+        public static string CompleteOrderId = "12555";
         public static string SuspandedOrderId = "68915";
         public static AdvertisementSearchModel ShellToFill
         {

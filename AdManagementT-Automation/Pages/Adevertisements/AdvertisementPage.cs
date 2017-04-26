@@ -230,6 +230,7 @@ namespace AdManagementT_Automation.Pages.Adevertisements
         }
         internal void SearchByTerms(IList<string> list)
         {
+            this.ClearFilter();
             this.TagBasedInput(list, SearchTermsControl);
             this.Search();
             this.VerifySearchTerms(list);
@@ -242,6 +243,7 @@ namespace AdManagementT_Automation.Pages.Adevertisements
         }
         internal void SearchByRate(IList<string> list)
         {
+            this.ClearFilter();
             Select.SelectFromMultipleControl(list, RateControl);
             this.Search();
             this.verifyIFResultExists();

@@ -1,9 +1,11 @@
 ﻿using AdManagementT_Automation.Base;
 using AdManagementT_Automation.Controls;
 using AdManagementT_Automation.Ref;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
 using SeleniumExtension.Controls;
+using SeleniumExtension.Driver;
 using SeleniumExtension.Utilties;
 using System;
 using System.Collections.Generic;
@@ -15,13 +17,17 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
 {
     public class AllOrdersPage
     {
-
+        IWebDriver driver = SDriver.Browser;
         [FindsBy(How = How.CssSelector, Using = "tr[ng-show='show_filter']")]
         private IWebElement OrderFilterParent { get; set; }
 
         [FindsBy(How = How.CssSelector, Using = "button[data-ng-click='::manageRenewal()']")]
         private IWebElement RenewalBtn { get; set; }
 
+
+        [FindsBy(How = How.CssSelector, Using = "button[class='btn btn-default dropdown-toggle ng-binding']")]
+        private IWebElement StatusChangeBtn { get; set; }
+       
 
 
         [FindsBy(How = How.TagName, Using = "tbody")]
@@ -218,6 +224,44 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
                 throw new Exception("Check box is Enabled for future year.");
             }
             Select.ByText(FilterYearDD, DateTime.Now.Year.ToString());
+            Wait.AM_Loaging_ShowAndHide();
+        }
+
+        internal AllOrdersPage ChangeStatusOfOrder(string OrderId, string Status)
+        {
+            this.ClearFilter();
+          var OrderRow=this.SearchOrder(OrderId);
+          if (!this.VerifyStatus(OrderRow,Status)) {
+              OrderRow.FindElement(By.TagName("input")).Click();
+              Wait.Second(1);
+              StatusChangeBtn.Click();
+              Wait.UntilDisply(By.LinkText(Status));
+              this.driver.FindElement(By.LinkText(Status)).Click();
+              this.VerifyStatusChange();
+          }
+          return this;
+        }
+
+        private void VerifyStatusChange()
+        {
+            var message=Wait.UntilToastMessageShow();
+            if (message.Any(e => e.Contains("Status changed successfully for Order")))
+            {
+
+            }
+            else {
+                Assert.Fail("Unable to Change status of Order");
+            }
+        }
+
+        private bool VerifyStatus(IWebElement OrderRow,string Status)
+        {
+            return OrderRow.FindElements(By.TagName("td"))[5].Text.Trim().ToLower() == Status.ToLower();
+        }
+
+        internal void Reload()
+        {
+            this.driver.Navigate().Refresh();
             Wait.AM_Loaging_ShowAndHide();
         }
     }

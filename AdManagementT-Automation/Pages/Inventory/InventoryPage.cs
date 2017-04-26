@@ -116,6 +116,7 @@ namespace AdManagementT_Automation.Pages.Inventory
         {
             Wait.MLSeconds(200);
             Wait.UntilClickAble(SearchBtn);
+            Wait.Second(1);
             SearchBtn.Click();
             Wait.AM_Loaging_ShowAndHide();
             return this;

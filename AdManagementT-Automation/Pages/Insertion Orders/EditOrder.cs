@@ -129,6 +129,7 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
         {
             //this.OpenAdGroupPanel();
             AddNoteText.SendKeys(Note);
+            Wait.UntilClickAble(AddNoteBtn);
             AddNoteBtn.Click();
             this.SaveNote(Note);
             return true;
@@ -335,9 +336,11 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
 
         public void AddNewOrderLine(string lineType)
         {
+            Element.ScrolToTop();
             Element.ScrolTo(AddOrderLineBtn);
             Wait.MLSeconds(500);
             Wait.UntilClickAble(AddOrderLineBtn);
+            Wait.Second(1);
             AddOrderLineBtn.Click();
             Wait.MLSeconds(500);
             if (lineType == "PFP")

@@ -210,7 +210,7 @@ namespace SeleniumExtension.Utilties
         }
         private static void InstantUntilDisply(By by)
         {
-            int MaxWaitedSec = 120;
+            int MaxWaitedSec = 180;
             int TimeToCalculate = 0;
             int loopWaitTime = 0;
             IWebDriver driver = SDriver.Browser;

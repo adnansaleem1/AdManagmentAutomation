@@ -118,6 +118,7 @@
     <Compile Include="Ref\BrowserTypes.cs" />
     <Compile Include="Ref\Config.cs" />
     <Compile Include="Utilties\ExcelReader.cs" />
+    <Compile Include="Utilties\ExtentReport.cs" />
     <Compile Include="Utilties\FileHandler.cs" />
     <Compile Include="Utilties\Log.cs" />
     <Compile Include="Utilties\URL.cs" />

@@ -135,6 +135,7 @@ namespace AdManagementT_Automation.Controls
                 Wait.AM_Loaging_ShowAndHide();
             }
             if (aM_Sub_Order == AM_Sub_Insertion_Orders.All_Order) {
+                Wait.IfLoadingIsStillVisible();
                 driver.FindElement(By.LinkText("All Orders")).Click();
                 Wait.AM_Loaging_ShowAndHide();
             }
@@ -158,6 +159,9 @@ namespace AdManagementT_Automation.Controls
             else if (Active == "Reports")
             {
                 return AM_MainTab.Reports;
+            }
+            else if (Active == "Advertisements") {
+                return AM_MainTab.Advertisments;
             }
             throw new Exception("Unable to identify selected main tab.");
            

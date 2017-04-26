@@ -142,6 +142,9 @@ namespace AdManagementT_Automation.Pages.Inventory
             {
                 Select.TagBasedInputAboslute(Data.SearchTerms, searchTermsControl);
             }
+            if (AdType.Text != Data.AdType) {
+                Select.ByText(AdType, Data.AdType);
+            }
            // Element.syncCheckBox(inventory.IncludeSubCat, SubCatagoriesCheckbox);
             Wait.MLSeconds(100);
         }

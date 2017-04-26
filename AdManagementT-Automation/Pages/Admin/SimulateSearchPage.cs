@@ -100,6 +100,7 @@ namespace AdManagementT_Automation.Pages.Admin
             }
             Select.ByText(TestCall_Productgroup, productGroup);
             Select.ByText(TestCall_AdType,adtype);
+            Wait.UntilClickAble(TestCall_SearchBtn);
             TestCall_SearchBtn.Click();
             Wait.AM_Loaging_ShowAndHide();
         }

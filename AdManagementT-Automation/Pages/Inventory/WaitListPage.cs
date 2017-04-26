@@ -110,6 +110,7 @@ namespace AdManagementT_Automation.Pages.Inventory
                 form_CostField.SendKeys(Data.Cost.ToString());
             } if (!string.IsNullOrEmpty(Data.defaultProduct))
             {
+                SelectAdType(Data);
                 Element.ScrolTo(form_DefaultProduct);
                 form_DefaultProduct.Clear();
                 form_DefaultProduct.SendKeys(Data.defaultProduct);
@@ -120,12 +121,17 @@ namespace AdManagementT_Automation.Pages.Inventory
             {
                 Select.ByText(form_coordinatorDD, Data.Coordinator);
             }
+            SelectAdType(Data);
+            return this;
+        }
+
+        private void SelectAdType(WaitListModel Data)
+        {
             Wait.MLSeconds(200);
             if (!string.IsNullOrEmpty(Data.AddType))
             {
                 Select.ByText(form_AdTypeDD, Data.AddType);
             }
-            return this;
         }
         private void SelectSearchTerms(string searchTerms)
         {

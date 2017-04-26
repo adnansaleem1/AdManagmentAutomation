@@ -10,6 +10,7 @@ using SeleniumExtension.Driver;
 using AddManagmentData.Data;
 using System.Collections.Generic;
 using AddManagmentData.Model.Admin;
+using SeleniumExtension.Controls;
 
 namespace AdManagementT_Automation
 {
@@ -1229,6 +1230,17 @@ namespace AdManagementT_Automation
             OrderLine.GoBackOrder();
 
         }
+        [Test, Order(AddUserData.TO + 67)]
+        public void ChangeTheStatusOfOrder()
+        {
+            this.LogInToAddManagement();
+            var AllOrders = PagesRepo.AllOrders;
+            var EditOrder = PagesRepo.EditOrder;
+            var OrderLine = PagesRepo.EditOrderLine;
+            var data = OrderLineData.ESP_Website;
+            AllOrders.Navigate().ChangeStatusOfOrder(OrderLineData.OrderId, "Completed");
+
+        }
         [Test, Order(AddUserData.TO + 68)]
         public void OrderSummary_ActiveTotal()
         {
@@ -1238,6 +1250,7 @@ namespace AdManagementT_Automation
             var OrderLine = PagesRepo.EditOrderLine;
             var data = OrderLineData.OrderSummary_VerificationData;
             var OrderID = OrderLineData.ActiveOrderId;
+            AllOrders.Navigate().ChangeStatusOfOrder(OrderLineData.OrderId, "Active");
             AllOrders.Navigate();
             AllOrders.ClearFilter();
             Double Active = AllOrders.GetactiveAdAmmount();
@@ -1256,15 +1269,12 @@ namespace AdManagementT_Automation
             Double AdNewActive = EditOrder.GetActiveCost();
             EditOrder.GoBackToAllOrders();
             AllOrders.ClearFilter();
+            AllOrders.Reload();
             Double NewActive = AllOrders.GetactiveAdAmmount();
             Double NewTotal = AllOrders.GetTotalAdAmmount();
             Double NewSuspanded = AllOrders.GetSuspandedAdAmmount();
             Double NewCompleted = AllOrders.GetCompletedAdAmmount();
             var Cost = data.Cost;
-            if (Cost + AdActive != AdNewActive)
-            {
-                throw new Exception(string.Format("Active Information did't match after add order line --Information: Order ID :{0}  old Active:{1} New Active:{2} Cost:{3} ", OrderID, AdActive, AdNewActive, Cost));
-            }
             if (Cost + AdTotal != AdNewTotal)
             {
                 throw new Exception(string.Format("Active Information did't match after add order line --Information: Order ID :{0}  old Total:{1} New Total:{2} Cost:{3} ", OrderID, AdTotal, AdNewTotal, Cost));
@@ -1274,7 +1284,7 @@ namespace AdManagementT_Automation
                 throw new Exception(string.Format("Active Information did't match after add order line(All Orders) --Information: Order ID :{0}  old Active:{1} New Active:{2} Cost:{3} ", OrderID, Active, NewActive, Cost));
 
             }
-            if (Cost + Total != NewTotal + 1)
+            if (Cost + Total != NewTotal)
             {
                 throw new Exception(string.Format("Active Information did't match after add order line(All Orders) --Information: Order ID :{0}  old Active:{1} New Active:{2} Cost:{3} ", OrderID, Active, NewActive, Cost));
 
@@ -1288,9 +1298,11 @@ namespace AdManagementT_Automation
             var EditOrder = PagesRepo.EditOrder;
             var OrderLine = PagesRepo.EditOrderLine;
             var data = OrderLineData.OrderSummary_VerificationData;
-            data.Status = "Completed";
+            //var OrderId = "12555";
+            data.Status = "Suspended";
             data.ProductId_ManualSelection = null;
             var OrderID = OrderLineData.CompleteOrderId;
+            AllOrders.Navigate().ChangeStatusOfOrder(OrderID, "Completed");
             AllOrders.ClearFilter();
             Double Active = AllOrders.GetactiveAdAmmount();
             Double Total = AllOrders.GetTotalAdAmmount();
@@ -1308,6 +1320,7 @@ namespace AdManagementT_Automation
             Double AdNewActive = EditOrder.GetActiveCost();
             EditOrder.GoBackToAllOrders();
             AllOrders.ClearFilter();
+            AllOrders.Reload();
             Double NewActive = AllOrders.GetactiveAdAmmount();
             Double NewTotal = AllOrders.GetTotalAdAmmount();
             Double NewSuspanded = AllOrders.GetSuspandedAdAmmount();
@@ -1343,7 +1356,8 @@ namespace AdManagementT_Automation
             data.Status = "Completed";
             data.ProductId_ManualSelection = null;
             var OrderID = OrderLineData.SuspandedOrderId;
-            AllOrders.ClearFilter();
+            AllOrders.ClearFilter(); 
+            AllOrders.Navigate().ChangeStatusOfOrder(OrderLineData.OrderId, "Suspended");           
             Double Active = AllOrders.GetactiveAdAmmount();
             Double Total = AllOrders.GetTotalAdAmmount();
             Double Suspanded = AllOrders.GetSuspandedAdAmmount();
@@ -1408,8 +1422,10 @@ namespace AdManagementT_Automation
         [Test, Order(AddUserData.TO + 72)]
         public void AddPFPOrderLine_SaveAndCopy()
         {
+
             this.LogInToAddManagement();
             var AllOrders = PagesRepo.AllOrders;
+            AllOrders.Navigate().ChangeStatusOfOrder(OrderLineData.OrderId, "Active");                       
             AllOrders.Navigate()
             .SelectGivenOrderByID(OrderLineData.OrderId);
             PagesRepo.EditOrder.AddNewOrderLine("PFP");
@@ -1809,7 +1825,8 @@ namespace AdManagementT_Automation
         [TearDown]
         public void TearDownAfterEveryTest()
         {
-
+            Modal.Close();
+            Modal.dirtCheckClose();
         }
         #endregion
 
