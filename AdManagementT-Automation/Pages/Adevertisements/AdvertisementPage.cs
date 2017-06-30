@@ -119,6 +119,9 @@ namespace AdManagementT_Automation.Pages.Adevertisements
         private AdvertisementPage Search()
         {
             Wait.MLSeconds(500);
+            Wait.UntilClickAble(Searchbtn);
+            Wait.UntilLoading();
+            Element.ScrolTo(Searchbtn);
             Searchbtn.Click();
             Wait.AM_Loaging_ShowAndHide();
             return this;
@@ -269,7 +272,7 @@ namespace AdManagementT_Automation.Pages.Adevertisements
             else
             {
                 Logger.Log(LogingType.TextCaseFail, "Search With Member Id Result Not Verified");
-                throw new Exception();
+                throw new Exception(String.Format("Search With Member Id Result Not Verified Member Id {0}",p));
             }
             //  this.FindMemberIdFromResultRow(Rows[0]);
 
@@ -348,7 +351,11 @@ namespace AdManagementT_Automation.Pages.Adevertisements
         {
             this.Search();
             FileHandler.BerforeDownLoadNotification();
+            Wait.UntilClickAble(DownloadAdsBtn);
+            Wait.MLSeconds(500);
+            Wait.UntilLoading();
             DownloadAdsBtn.Click();
+            Wait.MLSeconds(300);
             Wait.UntilDownloading();
             FileHandler.CheckIfExcelFileContainRecords(FileHandler.FindExcelFilePathForReport());
             

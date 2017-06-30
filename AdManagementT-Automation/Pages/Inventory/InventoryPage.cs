@@ -213,6 +213,7 @@ namespace AdManagementT_Automation.Pages.Inventory
         {
             driver.FindElement(By.Id("menu1")).Click();
             Wait.MLSeconds(300);
+            Wait.UntilLoading();
             driver.FindElement(By.LinkText(p)).Click();
             Wait.AM_Loaging_ShowAndHide();
             return this;

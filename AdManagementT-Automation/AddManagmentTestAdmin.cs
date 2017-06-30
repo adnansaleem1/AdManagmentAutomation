@@ -11,6 +11,7 @@ using AddManagmentData.Data;
 using System.Collections.Generic;
 using AddManagmentData.Model.Admin;
 using SeleniumExtension.Controls;
+using SeleniumExtension.Utilties;
 
 namespace AdManagementT_Automation
 {
@@ -66,7 +67,8 @@ namespace AdManagementT_Automation
             int? InventoryBookCount = OrderLineposData.Impressions;
             Allorder.Navigate();
             Allorder.ClearFilter();
-            Allorder.SelectGivenOrderByID(OrderLineData.ActiveOrderId);
+            OrderLineposData.ProductId_ManualSelection = OrderLineData.ParmanentActiveProductId == "" ? OrderLineposData.ProductId_ManualSelection : new List<string>() { OrderLineData.ParmanentActiveProductId };
+            Allorder.SelectGivenOrderByID(OrderLineData.ParmanentActiveOrderId);
             Editorder.AddNewOrderLine("PFP");
             for (var count = 1; count < 10; count++)
             {
@@ -120,7 +122,8 @@ namespace AdManagementT_Automation
             int? InventoryBookCount = OrderLineposData.Impressions;
             Allorder.Navigate();
             Allorder.ClearFilter();
-            Allorder.SelectGivenOrderByID(OrderLineData.ActiveOrderId);
+            OrderLineposData.ProductId_ManualSelection = OrderLineData.ParmanentActiveProductId == "" ? OrderLineposData.ProductId_ManualSelection : new List<string>() { OrderLineData.ParmanentActiveProductId };
+            Allorder.SelectGivenOrderByID(OrderLineData.ParmanentActiveOrderId);
             Editorder.AddNewOrderLine("PFP");
             for (var count = 1; count < 5; count++)
             {
@@ -159,11 +162,11 @@ namespace AdManagementT_Automation
             var PostionHistoyList = new List<int>();
             var PostionNewList = new List<int>();
             var OrderLineposData = OrderLineData.InventoryBookedVerification;
-            Data.SearchTerms = new List<string>() { "RUGS" };
+            Data.SearchTerms = new List<string>() { "ANTIMICROBIAL ENHANCED PRODUCTS" };
             Data.ProductGroup = "ESP";
             Data.AdType = "Banner";
-            OrderLineposData.ProductInformation = "RUGS";
-            OrderLineposData.SearchTerm = "RUGS";
+            OrderLineposData.ProductInformation = "ANTIMICROBIAL ENHANCED PRODUCTS";
+            OrderLineposData.SearchTerm = "ANTIMICROBIAL ENHANCED PRODUCTS";
             OrderLineposData.ProductGroup = "ESP";
             OrderLineposData.AddType = "Results Banner";
             OrderLineposData.Position = null;
@@ -181,7 +184,7 @@ namespace AdManagementT_Automation
             int? InventoryBookCount = OrderLineposData.Impressions;
             Allorder.Navigate();
             Allorder.ClearFilter();
-            Allorder.SelectGivenOrderByID(OrderLineData.ActiveOrderId);
+            Allorder.SelectGivenOrderByID(OrderLineData.ParmanentActiveOrderId);
             Editorder.AddNewOrderLine("Banner");
 
             //OrderLineposData.Position = count;
@@ -232,11 +235,11 @@ namespace AdManagementT_Automation
             var PostionHistoyList = new List<int>();
             var PostionNewList = new List<int>();
             var OrderLineposData = OrderLineData.InventoryBookedVerification;
-            Data.SearchTerms = new List<string>() { "RUGS" };
+            Data.SearchTerms = new List<string>() { "ANTIMICROBIAL ENHANCED PRODUCTS" };
             Data.ProductGroup = "ESP";
             Data.AdType = "Banner";
-            OrderLineposData.ProductInformation = "RUGS";
-            OrderLineposData.SearchTerm = "RUGS";
+            OrderLineposData.ProductInformation = "ANTIMICROBIAL ENHANCED PRODUCTS";
+            OrderLineposData.SearchTerm = "ANTIMICROBIAL ENHANCED PRODUCTS";
             OrderLineposData.ProductGroup = "ESP";
             OrderLineposData.AddType = "Results Banner";
             OrderLineposData.Position = null;
@@ -254,7 +257,7 @@ namespace AdManagementT_Automation
             int? InventoryBookCount = OrderLineposData.Impressions;
             Allorder.Navigate();
             Allorder.ClearFilter();
-            Allorder.SelectGivenOrderByID(OrderLineData.ActiveOrderId);
+            Allorder.SelectGivenOrderByID(OrderLineData.ParmanentActiveOrderId);
             Editorder.AddNewOrderLine("Banner");
 
             //OrderLineposData.Position = count;
@@ -305,11 +308,11 @@ namespace AdManagementT_Automation
             var PostionHistoyList = new List<int>();
             var PostionNewList = new List<int>();
             var OrderLineposData = OrderLineData.InventoryBookedVerification;
-            Data.SearchTerms = new List<string>() { "RUGS" };
+            Data.SearchTerms = new List<string>() { "ANTIMICROBIAL ENHANCED PRODUCTS" };
             Data.ProductGroup = "ESP";
             Data.AdType = "Banner";
-            OrderLineposData.ProductInformation = "RUGS";
-            OrderLineposData.SearchTerm = "RUGS";
+            OrderLineposData.ProductInformation = "ANTIMICROBIAL ENHANCED PRODUCTS";
+            OrderLineposData.SearchTerm = "ANTIMICROBIAL ENHANCED PRODUCTS";
             OrderLineposData.ProductGroup = "ESP";
             OrderLineposData.AddType = "Results Banner";
             OrderLineposData.Position = null;
@@ -327,7 +330,7 @@ namespace AdManagementT_Automation
             int? InventoryBookCount = OrderLineposData.Impressions;
             Allorder.Navigate();
             Allorder.ClearFilter();
-            Allorder.SelectGivenOrderByID(OrderLineData.ActiveOrderId);
+            Allorder.SelectGivenOrderByID(OrderLineData.ParmanentActiveOrderId);
             Editorder.AddNewOrderLine("Banner");
 
             //OrderLineposData.Position = count;
@@ -378,11 +381,11 @@ namespace AdManagementT_Automation
             var PostionHistoyList = new List<int>();
             var PostionNewList = new List<int>();
             var OrderLineposData = OrderLineData.InventoryBookedVerification;
-            Data.SearchTerms = new List<string>() { "RUGS" };
+            Data.SearchTerms = new List<string>() { "ANTIMICROBIAL ENHANCED PRODUCTS" };
             Data.ProductGroup = "ESP";
             Data.AdType = "Banner";
-            OrderLineposData.ProductInformation = "RUGS";
-            OrderLineposData.SearchTerm = "RUGS";
+            OrderLineposData.ProductInformation = "ANTIMICROBIAL ENHANCED PRODUCTS";
+            OrderLineposData.SearchTerm = "ANTIMICROBIAL ENHANCED PRODUCTS";
             OrderLineposData.ProductGroup = "ESP";
             OrderLineposData.AddType = "Results Banner";
             OrderLineposData.Position = null;
@@ -397,7 +400,7 @@ namespace AdManagementT_Automation
             int? InventoryBookCount = OrderLineposData.Impressions;
             Allorder.Navigate();
             Allorder.ClearFilter();
-            Allorder.SelectGivenOrderByID(OrderLineData.ActiveOrderId);
+            Allorder.SelectGivenOrderByID(OrderLineData.ParmanentActiveOrderId);
             Editorder.AddNewOrderLine("Banner");
             EditorderLine.FillOrderLine_Admin(OrderLineposData);
             EditorderLine.SaveAndAdd();
@@ -447,7 +450,7 @@ namespace AdManagementT_Automation
             int? InventoryBookCount = OrderLineposData.Impressions;
             Allorder.Navigate();
             Allorder.ClearFilter();
-            Allorder.SelectGivenOrderByID(OrderLineData.ActiveOrderId);
+            Allorder.SelectGivenOrderByID(OrderLineData.ParmanentActiveOrderId);
             Editorder.AddNewOrderLine("Banner");
             EditorderLine.FillOrderLine_Admin(OrderLineposData);
             EditorderLine.SaveAndAdd();
@@ -497,7 +500,7 @@ namespace AdManagementT_Automation
             int? InventoryBookCount = OrderLineposData.Impressions;
             Allorder.Navigate();
             Allorder.ClearFilter();
-            Allorder.SelectGivenOrderByID(OrderLineData.ActiveOrderId);
+            Allorder.SelectGivenOrderByID(OrderLineData.ParmanentActiveOrderId);
             Editorder.AddNewOrderLine("Banner");
             EditorderLine.FillOrderLine_Admin(OrderLineposData);
             EditorderLine.SaveAndAdd();
@@ -582,9 +585,11 @@ namespace AdManagementT_Automation
             WaitListdata.Cost = null;
             OrderLinedata.ProductInformation=OrderLinedata.SearchTerm = WaitListdata.SearchTerms;
             OrderLinedata.Priority = null;
+            OrderLinedata.ProductId_ManualSelection = OrderLineData.ParmanentActiveProductId == "" ? OrderLinedata.ProductId_ManualSelection : new List<string>() { OrderLineData.ParmanentActiveProductId };
+
             this.LogInToAddManagement();
             AllOrders.Navigate()
-            .SelectGivenOrderByID(OrderLineData.OrderId);
+            .SelectGivenOrderByID(OrderLineData.ParmanentActiveOrderId);
             EditOrder.DeleteResultBannerIfAlreadyExists(OrderLinedata);
             PagesRepo.EditOrder.AddNewOrderLine("PFP");
             PagesRepo.EditOrderLine.
@@ -612,11 +617,12 @@ namespace AdManagementT_Automation
             Data.Position = null;
             Data.Cost = null;
             AllOrders.Navigate()
-            .SelectGivenOrderByID(OrderLineData.OrderId);
+            .SelectGivenOrderByID(OrderLineData.ParmanentActiveOrderId);
             data.DeliveryPreferences = null;
             data.AddType = "Results Banner";
             data.ProductGroup = "ESP Mobile";
             data.Position = null;
+
             data.ProductInformation=data.SearchTerm = Data.SearchTerms;
             EditOrder.DeleteResultBannerIfAlreadyExists(data);
             PagesRepo.EditOrder.AddNewOrderLine("Banner");
@@ -716,6 +722,7 @@ namespace AdManagementT_Automation
             this.LogInToAddManagement();
             var ProposalPage = PagesRepo.CreatePropsal;
             var Data = InventoryData.CreateProposal;
+            Data.SearchTerms = new List<string>() {"MUGS & STEINS/Mugs & Steins-Ceramic"};
             Data.ProductGroup = "ESP Mobile";
             ProposalPage.Navigate()
                 .CreateProposal(Data);
@@ -727,7 +734,7 @@ namespace AdManagementT_Automation
             this.LogInToAddManagement();
             var ProposalPage = PagesRepo.CreatePropsal;
             var Data = InventoryData.CreateProposal;
-            Data.SearchTerms[0] = "BACKPACKS";
+            Data.SearchTerms[0] = "MUGS & STEINS";
             Data.InventoryType = "Banners";
             Data.ProductGroup = "ESP Mobile";
             Data.AdType = "Banner";
@@ -735,19 +742,19 @@ namespace AdManagementT_Automation
                 .CreateProposal(Data);
 
         }
-        [Test, Order(AddUserData.TO + 26)]
-        public void CreateProposal_ExportToExcel()
-        {
-            this.LogInToAddManagement();
-            var ProposalPage = PagesRepo.CreatePropsal;
-            var allPro = PagesRepo.AllProposalPage;
+        //[Test, Order(AddUserData.TO + 26)]
+        //public void CreateProposal_ExportToExcel()
+        //{
+        //    this.LogInToAddManagement();
+        //    var ProposalPage = PagesRepo.CreatePropsal;
+        //    var allPro = PagesRepo.AllProposalPage;
 
-            var Data = InventoryData.CreateProposal;
-            ProposalPage.Navigate()
-                .CreateProposal(Data);
-            allPro.Navigate().OpenProposal(Data);
-            ProposalPage.Export("excel");
-        }
+        //    var Data = InventoryData.CreateProposal;
+        //    ProposalPage.Navigate()
+        //        .CreateProposal(Data);
+        //    allPro.Navigate().OpenProposal(Data);
+        //    ProposalPage.Export("excel");
+        //}
         [Test, Order(AddUserData.TO + 27)]
         public void CreateProposal_ExportToPdf()
         {
@@ -1069,25 +1076,26 @@ namespace AdManagementT_Automation
         [Test, Order(AddUserData.TO + 59)]
         public void ESP_PFP_TestCall()
         {
-            var oerderId = OrderLineData.ActiveOrderId;
+            var oerderId = OrderLineData.ParmanentActiveOrderId;
             var SimulateSearch = PagesRepo.SimulateSearchPage;
             var Data = OrderLineData.ESP_PFP;
             Data.DeliveryPreferences = "Standard";
             Data.Position = 7;
             //Data.SearchTerm = "/BAGS/BEACH";
             //Data.ProductInformation= "/BAGS/BEACH";
+            Data.ProductId_ManualSelection = OrderLineData.ParmanentActiveProductId == "" ? Data.ProductId_ManualSelection : new List<string>() { OrderLineData.ParmanentActiveProductId };
             var AllOrders = PagesRepo.AllOrders;
             var EditOrder = PagesRepo.EditOrder;
             this.LogInToAddManagement();
             AllOrders.Navigate()
-            .SelectGivenOrderByID(OrderLineData.OrderId);
+            .SelectGivenOrderByID(OrderLineData.ParmanentActiveOrderId);
             EditOrder.DeleteAllOrderLine(Data);
             SimulateSearch.Navigate().
             TestCall("/BAGS/BEACH", oerderId, "ESP", "PFP");
             var Pos1_Data = SimulateSearch.GetPostionData(7, 1);
             // var AllOrders = PagesRepo.AllOrders;
             AllOrders.Navigate()
-            .SelectGivenOrderByID(OrderLineData.OrderId);
+            .SelectGivenOrderByID(OrderLineData.ParmanentActiveOrderId);
             EditOrder.AddNewOrderLine("PFP");
             PagesRepo.EditOrderLine.
                 FillOrderLine_Admin(Data).Save();
@@ -1105,20 +1113,22 @@ namespace AdManagementT_Automation
             var SimulateSearch = PagesRepo.SimulateSearchPage;
             var Data = OrderLineData.ESP_Website;
             //Data.ProductGroup = "ESP Websites";
+            Data.ProductId_ManualSelection = OrderLineData.ParmanentActiveProductId == "" ? Data.ProductId_ManualSelection : new List<string>() { OrderLineData.ParmanentActiveProductId };
+
             Data.DeliveryPreferences = "Standard";
             //Data.Position = 9;
             Data.SearchTerm = "BAGS/BEACH BAGS";
             Data.ProductInformation = "BAGS/BEACH BAGS";
             this.LogInToAddManagement();
             AllOrders.Navigate()
-            .SelectGivenOrderByID(OrderLineData.OrderId);
+            .SelectGivenOrderByID(OrderLineData.ParmanentActiveOrderId);
             EditOrder.DeleteAllOrderLine(Data);
             SimulateSearch.Navigate().
             TestCall("/BAGS/BEACH", oerderId, "ESP Websites", "PFP");
             var Pos1_Data = SimulateSearch.GetPostionData(1, 1);
             //var AllOrders = PagesRepo.AllOrders;
             AllOrders.Navigate()
-            .SelectGivenOrderByID(OrderLineData.OrderId);
+            .SelectGivenOrderByID(OrderLineData.ParmanentActiveOrderId);
             PagesRepo.EditOrder.AddNewOrderLine("PFP");
             PagesRepo.EditOrderLine.
                 FillOrderLine_Admin(Data).Save();
@@ -1167,36 +1177,38 @@ namespace AdManagementT_Automation
             editOrder.DeleteNote(data);
             editOrder.CreateNewNote(data);
         }
-        [Test, Order(AddUserData.TO + 64)]
-        public void ExportToExcel()
-        {
-            this.LogInToAddManagement();
-            var AllOrders = PagesRepo.AllOrders;
-            var editOrder = PagesRepo.EditOrder;
-            AllOrders.Navigate()
-            .SelectGivenOrderByID(OrderLineData.OrderId);
-            editOrder.ExportToExcel();
-        }
-        [Test, Order(AddUserData.TO + 65)]
-        public void ExportToPDF()
-        {
-            this.LogInToAddManagement();
-            var AllOrders = PagesRepo.AllOrders;
-            var editOrder = PagesRepo.EditOrder;
-            AllOrders.Navigate()
-            .SelectGivenOrderByID(OrderLineData.OrderId);
-            editOrder.ExportToPDF();
-        }
+        //[Test, Order(AddUserData.TO + 64)]
+        //public void ExportToExcel()
+        //{
+        //    this.LogInToAddManagement();
+        //    var AllOrders = PagesRepo.AllOrders;
+        //    var editOrder = PagesRepo.EditOrder;
+        //    AllOrders.Navigate()
+        //    .SelectGivenOrderByID(OrderLineData.OrderId);
+        //    editOrder.ExportToExcel();
+        //}
+        //[Test, Order(AddUserData.TO + 65)]
+        //public void ExportToPDF()
+        //{
+        //    this.LogInToAddManagement();
+        //    var AllOrders = PagesRepo.AllOrders;
+        //    var editOrder = PagesRepo.EditOrder;
+        //    AllOrders.Navigate()
+        //    .SelectGivenOrderByID(OrderLineData.OrderId);
+        //    editOrder.ExportToPDF();
+        //}
         [Test, Order(AddUserData.TO + 66)]
-        public void AddAnAddVerifyTotalUpdate()
+        public void AddAnAdVerifyTotalUpdate()
         {
             this.LogInToAddManagement();
             var AllOrders = PagesRepo.AllOrders;
             var EditOrder = PagesRepo.EditOrder;
             var OrderLine = PagesRepo.EditOrderLine;
             var data = OrderLineData.ESP_Website;
+            data.ProductId_ManualSelection = OrderLineData.ParmanentActiveProductId == "" ? data.ProductId_ManualSelection : new List<string>() { OrderLineData.ParmanentActiveProductId };
+
             AllOrders.Navigate()
-            .SelectGivenOrderByID(OrderLineData.OrderId);
+            .SelectGivenOrderByID(OrderLineData.ParmanentActiveOrderId);
             EditOrder.DeleteResultBannerIfAlreadyExists(data);
             int PreAdCount = EditOrder.GetAdCount();
             EditOrder.AddNewOrderLine("PFP");
@@ -1216,8 +1228,10 @@ namespace AdManagementT_Automation
             var EditOrder = PagesRepo.EditOrder;
             var OrderLine = PagesRepo.EditOrderLine;
             var data = OrderLineData.ESP_Website;
+            data.ProductId_ManualSelection = OrderLineData.ParmanentActiveProductId == "" ? data.ProductId_ManualSelection : new List<string>() { OrderLineData.ParmanentActiveProductId };
+
             AllOrders.Navigate()
-            .SelectGivenOrderByID(OrderLineData.OrderId);
+            .SelectGivenOrderByID(OrderLineData.ParmanentActiveOrderId);
             EditOrder.DeleteResultBannerIfAlreadyExists(data);
             int PreAdCount = EditOrder.GetAdCount();
             EditOrder.AddNewOrderLine("PFP");
@@ -1249,8 +1263,10 @@ namespace AdManagementT_Automation
             var EditOrder = PagesRepo.EditOrder;
             var OrderLine = PagesRepo.EditOrderLine;
             var data = OrderLineData.OrderSummary_VerificationData;
-            var OrderID = OrderLineData.ActiveOrderId;
-            AllOrders.Navigate().ChangeStatusOfOrder(OrderLineData.OrderId, "Active");
+            var OrderID = OrderLineData.ParmanentActiveOrderId;
+            data.ProductId_ManualSelection = OrderLineData.ParmanentActiveProductId == "" ? data.ProductId_ManualSelection : new List<string>() { OrderLineData.ParmanentActiveProductId };
+
+            //AllOrders.Navigate().ChangeStatusOfOrder(OrderLineData.ParmanentActiveOrderId, "Active");
             AllOrders.Navigate();
             AllOrders.ClearFilter();
             Double Active = AllOrders.GetactiveAdAmmount();
@@ -1302,7 +1318,7 @@ namespace AdManagementT_Automation
             data.Status = "Suspended";
             data.ProductId_ManualSelection = null;
             var OrderID = OrderLineData.CompleteOrderId;
-            AllOrders.Navigate().ChangeStatusOfOrder(OrderID, "Completed");
+           // AllOrders.Navigate().ChangeStatusOfOrder(OrderID, "Completed");
             AllOrders.ClearFilter();
             Double Active = AllOrders.GetactiveAdAmmount();
             Double Total = AllOrders.GetTotalAdAmmount();
@@ -1357,7 +1373,7 @@ namespace AdManagementT_Automation
             data.ProductId_ManualSelection = null;
             var OrderID = OrderLineData.SuspandedOrderId;
             AllOrders.ClearFilter(); 
-            AllOrders.Navigate().ChangeStatusOfOrder(OrderLineData.OrderId, "Suspended");           
+           // AllOrders.Navigate().ChangeStatusOfOrder(OrderLineData.OrderId, "Suspended");           
             Double Active = AllOrders.GetactiveAdAmmount();
             Double Total = AllOrders.GetTotalAdAmmount();
             Double Suspanded = AllOrders.GetSuspandedAdAmmount();
@@ -1425,12 +1441,15 @@ namespace AdManagementT_Automation
 
             this.LogInToAddManagement();
             var AllOrders = PagesRepo.AllOrders;
-            AllOrders.Navigate().ChangeStatusOfOrder(OrderLineData.OrderId, "Active");                       
+            //AllOrders.Navigate().ChangeStatusOfOrder(OrderLineData.OrderId, "Active");                       
+            var data = OrderLineData.SaveAndCopy;
+            data.ProductId_ManualSelection = OrderLineData.ParmanentActiveProductId == "" ? data.ProductId_ManualSelection : new List<string>() { OrderLineData.ParmanentActiveProductId };
+            
             AllOrders.Navigate()
-            .SelectGivenOrderByID(OrderLineData.OrderId);
+            .SelectGivenOrderByID(OrderLineData.ParmanentActiveOrderId);
             PagesRepo.EditOrder.AddNewOrderLine("PFP");
             PagesRepo.EditOrderLine.
-                FillOrderLine_Admin(OrderLineData.SaveAndCopy).
+                FillOrderLine_Admin(data).
                 SaveAndCopy().VerifySaveAndCopy();
             PagesRepo.EditOrderLine.GoBackOrderLineByLink();
         }
@@ -1439,11 +1458,14 @@ namespace AdManagementT_Automation
         {
             this.LogInToAddManagement();
             var AllOrders = PagesRepo.AllOrders;
+            var Data=OrderLineData.SaveAndAdd;
+            Data.ProductId_ManualSelection = OrderLineData.ParmanentActiveProductId == "" ? Data.ProductId_ManualSelection : new List<string>() { OrderLineData.ParmanentActiveProductId };
+
             AllOrders.Navigate()
-            .SelectGivenOrderByID(OrderLineData.OrderId);
+            .SelectGivenOrderByID(OrderLineData.ParmanentActiveOrderId);
             PagesRepo.EditOrder.AddNewOrderLine("PFP");
             PagesRepo.EditOrderLine.
-            FillOrderLine_Admin(OrderLineData.SaveAndAdd).SaveAndAdd().VerifySaveAndAdd();
+            FillOrderLine_Admin(Data).SaveAndAdd().VerifySaveAndAdd();
             PagesRepo.EditOrderLine.GoBackOrderLineByLink();
         }
         [Test, Order(AddUserData.TO + 74)]
@@ -1455,8 +1477,9 @@ namespace AdManagementT_Automation
             var adgroup = OrderData.AdGroup;
             adgroup.GroupName = "Automation AssignGroup";
             var orderLineData = OrderLineData.SaveAndCopy;
+            orderLineData.ProductId_ManualSelection = OrderLineData.ParmanentActiveProductId == "" ? orderLineData.ProductId_ManualSelection : new List<string>() { OrderLineData.ParmanentActiveProductId };
             AllOrders.Navigate()
-            .SelectGivenOrderByID(OrderLineData.OrderId);
+            .SelectGivenOrderByID(OrderLineData.ParmanentActiveOrderId);
             if (editOrder.GetAddGroup(adgroup) == null)
             {
                 editOrder.CreateNewAddGroup(adgroup);
@@ -1490,11 +1513,12 @@ namespace AdManagementT_Automation
         {
             this.LogInToAddManagement();
             var AllOrders = PagesRepo.AllOrders;
+            var Data = OrderLineData.MultipleProductInManualSelection;
             AllOrders.Navigate()
-            .SelectGivenOrderByID(OrderLineData.OrderId);
+            .SelectGivenOrderByID(OrderLineData.ParmanentActiveOrderId);
             PagesRepo.EditOrder.AddNewOrderLine("PFP");
             PagesRepo.EditOrderLine.
-            FillOrderLine_Admin(OrderLineData.MultipleProductInManualSelection)
+            FillOrderLine_Admin(Data)
             .Save();
         }
         [Test, Order(AddUserData.TO + 77)]
@@ -1504,7 +1528,7 @@ namespace AdManagementT_Automation
             var AllOrders = PagesRepo.AllOrders;
             var EditOrder = PagesRepo.EditOrder;
             AllOrders.Navigate()
-            .SelectGivenOrderByID(OrderLineData.OrderId);
+            .SelectGivenOrderByID(OrderLineData.ParmanentActiveOrderId);
             EditOrder.DeleteResultBannerIfAlreadyExists(OrderLineData.ResultBanner);
             PagesRepo.EditOrder.AddNewOrderLine("Banner");
             PagesRepo.EditOrderLine.
@@ -1517,7 +1541,7 @@ namespace AdManagementT_Automation
             var AllOrders = PagesRepo.AllOrders;
             var EditOrder = PagesRepo.EditOrder;
             AllOrders.Navigate()
-            .SelectGivenOrderByID(OrderLineData.OrderId);
+            .SelectGivenOrderByID(OrderLineData.ParmanentActiveOrderId);
             EditOrder.DeleteResultBannerIfAlreadyExists(OrderLineData.ResultTile);
             PagesRepo.EditOrder.AddNewOrderLine("Banner");
             PagesRepo.EditOrderLine.
@@ -1530,7 +1554,7 @@ namespace AdManagementT_Automation
             var AllOrders = PagesRepo.AllOrders;
             var EditOrder = PagesRepo.EditOrder;
             AllOrders.Navigate()
-            .SelectGivenOrderByID(OrderLineData.OrderId);
+            .SelectGivenOrderByID(OrderLineData.ParmanentActiveOrderId);
             EditOrder.DeleteResultBannerIfAlreadyExists(OrderLineData.ResultTower);
             PagesRepo.EditOrder.AddNewOrderLine("Banner");
             PagesRepo.EditOrderLine.
@@ -1543,8 +1567,9 @@ namespace AdManagementT_Automation
             var AllOrders = PagesRepo.AllOrders;
             var EditOrder = PagesRepo.EditOrder;
             var data = OrderLineData.ESP_PFP;
+            data.ProductId_ManualSelection = OrderLineData.ParmanentActiveProductId == "" ? data.ProductId_ManualSelection : new List<string>() { OrderLineData.ParmanentActiveProductId };
             AllOrders.Navigate()
-            .SelectGivenOrderByID(OrderLineData.OrderId);
+            .SelectGivenOrderByID(OrderLineData.ParmanentActiveOrderId);
             EditOrder.DeleteResultBannerIfAlreadyExists(data);
             data.DeliveryPreferences = "Buy Out";
             PagesRepo.EditOrder.AddNewOrderLine("PFP");
@@ -1558,9 +1583,9 @@ namespace AdManagementT_Automation
             var AllOrders = PagesRepo.AllOrders;
             var EditOrder = PagesRepo.EditOrder;
             var data = OrderLineData.ESP_PFP;
-
+            data.ProductId_ManualSelection = OrderLineData.ParmanentActiveProductId == "" ? data.ProductId_ManualSelection : new List<string>() { OrderLineData.ParmanentActiveProductId };
             AllOrders.Navigate()
-            .SelectGivenOrderByID(OrderLineData.OrderId);
+            .SelectGivenOrderByID(OrderLineData.ParmanentActiveOrderId);
             EditOrder.DeleteResultBannerIfAlreadyExists(data);
             data.DeliveryPreferences = "Buy Remnant";
             PagesRepo.EditOrder.AddNewOrderLine("PFP");
@@ -1574,8 +1599,9 @@ namespace AdManagementT_Automation
             var AllOrders = PagesRepo.AllOrders;
             var EditOrder = PagesRepo.EditOrder;
             var data = OrderLineData.ESP_PFP;
+            data.ProductId_ManualSelection = OrderLineData.ParmanentActiveProductId == "" ? data.ProductId_ManualSelection : new List<string>() { OrderLineData.ParmanentActiveProductId };
             AllOrders.Navigate()
-            .SelectGivenOrderByID(OrderLineData.OrderId);
+            .SelectGivenOrderByID(OrderLineData.ParmanentActiveOrderId);
             EditOrder.DeleteResultBannerIfAlreadyExists(data);
             data.DeliveryPreferences = "Buy Remaining";
             PagesRepo.EditOrder.AddNewOrderLine("PFP");
@@ -1589,8 +1615,9 @@ namespace AdManagementT_Automation
             var AllOrders = PagesRepo.AllOrders;
             var EditOrder = PagesRepo.EditOrder;
             var data = OrderLineData.ESP_Website;
+            data.ProductId_ManualSelection = OrderLineData.ParmanentActiveProductId == "" ? data.ProductId_ManualSelection : new List<string>() { OrderLineData.ParmanentActiveProductId };
             AllOrders.Navigate()
-            .SelectGivenOrderByID(OrderLineData.OrderId);
+            .SelectGivenOrderByID(OrderLineData.ParmanentActiveOrderId);
             EditOrder.DeleteResultBannerIfAlreadyExists(data);
             data.DeliveryPreferences = "Buy Out";
             PagesRepo.EditOrder.AddNewOrderLine("PFP");
@@ -1604,8 +1631,9 @@ namespace AdManagementT_Automation
             var AllOrders = PagesRepo.AllOrders;
             var EditOrder = PagesRepo.EditOrder;
             var data = OrderLineData.ESP_Website;
+            data.ProductId_ManualSelection = OrderLineData.ParmanentActiveProductId == "" ? data.ProductId_ManualSelection : new List<string>() { OrderLineData.ParmanentActiveProductId };
             AllOrders.Navigate()
-            .SelectGivenOrderByID(OrderLineData.OrderId);
+            .SelectGivenOrderByID(OrderLineData.ParmanentActiveOrderId);
             EditOrder.DeleteResultBannerIfAlreadyExists(data);
             data.DeliveryPreferences = "Buy Remnant";
             PagesRepo.EditOrder.AddNewOrderLine("PFP");
@@ -1619,8 +1647,9 @@ namespace AdManagementT_Automation
             var AllOrders = PagesRepo.AllOrders;
             var EditOrder = PagesRepo.EditOrder;
             var data = OrderLineData.ESP_Website;
+            data.ProductId_ManualSelection = OrderLineData.ParmanentActiveProductId == "" ? data.ProductId_ManualSelection : new List<string>() { OrderLineData.ParmanentActiveProductId };
             AllOrders.Navigate()
-            .SelectGivenOrderByID(OrderLineData.OrderId);
+            .SelectGivenOrderByID(OrderLineData.ParmanentActiveOrderId);
             EditOrder.DeleteResultBannerIfAlreadyExists(data);
             data.DeliveryPreferences = "Buy Remaining";
             PagesRepo.EditOrder.AddNewOrderLine("PFP");
@@ -1635,7 +1664,7 @@ namespace AdManagementT_Automation
             var EditOrder = PagesRepo.EditOrder;
             var data = OrderLineData.ResultBanner;
             AllOrders.Navigate()
-            .SelectGivenOrderByID(OrderLineData.OrderId);
+            .SelectGivenOrderByID(OrderLineData.ParmanentActiveOrderId);
             data.DeliveryPreferences = "Standard";
             data.AddType = "Homepage Banner";
             data.Position = null;
@@ -1653,7 +1682,7 @@ namespace AdManagementT_Automation
             var EditOrder = PagesRepo.EditOrder;
             var data = OrderLineData.ResultBanner;
             AllOrders.Navigate()
-            .SelectGivenOrderByID(OrderLineData.OrderId);
+            .SelectGivenOrderByID(OrderLineData.ParmanentActiveOrderId);
             data.DeliveryPreferences = "Standard";
             data.AddType = "Homepage Tile";
             data.Position = null;
@@ -1670,9 +1699,11 @@ namespace AdManagementT_Automation
             var AllOrders = PagesRepo.AllOrders;
             var EditOrder = PagesRepo.EditOrder;
             var data = OrderLineData.Mobile_PFP;
+            data.ProductId_ManualSelection = OrderLineData.ParmanentActiveProductId == "" ? data.ProductId_ManualSelection : new List<string>() { OrderLineData.ParmanentActiveProductId };
+
             data.Priority = null;
             AllOrders.Navigate()
-            .SelectGivenOrderByID(OrderLineData.OrderId);
+            .SelectGivenOrderByID(OrderLineData.ParmanentActiveOrderId);
             EditOrder.DeleteResultBannerIfAlreadyExists(data);
             PagesRepo.EditOrder.AddNewOrderLine("PFP");
             PagesRepo.EditOrderLine.
@@ -1686,7 +1717,7 @@ namespace AdManagementT_Automation
             var EditOrder = PagesRepo.EditOrder;
             var data = OrderLineData.ResultBanner;
             AllOrders.Navigate()
-            .SelectGivenOrderByID(OrderLineData.OrderId);
+            .SelectGivenOrderByID(OrderLineData.ParmanentActiveOrderId);
             data.DeliveryPreferences = null;
             data.SearchTerm = "";
             data.AddType = "Homepage Tile";
@@ -1706,7 +1737,7 @@ namespace AdManagementT_Automation
             var EditOrder = PagesRepo.EditOrder;
             var data = OrderLineData.ResultBanner;
             AllOrders.Navigate()
-            .SelectGivenOrderByID(OrderLineData.OrderId);
+            .SelectGivenOrderByID(OrderLineData.ParmanentActiveOrderId);
             data.DeliveryPreferences = null;
             data.AddType = "Results Banner";
             data.ProductGroup = "ESP Mobile";
@@ -1724,7 +1755,7 @@ namespace AdManagementT_Automation
             var EditOrder = PagesRepo.EditOrder;
             var data = OrderLineData.ResultBanner;
             AllOrders.Navigate()
-            .SelectGivenOrderByID(OrderLineData.OrderId);
+            .SelectGivenOrderByID(OrderLineData.ParmanentActiveOrderId);
             data.DeliveryPreferences = null;
             //data.SearchTerm = "";
             data.AddType = "Login Banner";
@@ -1825,8 +1856,27 @@ namespace AdManagementT_Automation
         [TearDown]
         public void TearDownAfterEveryTest()
         {
-            Modal.Close();
-            Modal.dirtCheckClose();
+
+            try
+            {
+
+                Wait.UntilLoading();
+                Modal.Close();
+                try
+                {
+                    Modal.DirtyclickYes();
+                }
+                catch (Exception)
+                {
+                }
+                Wait.UntilLoading();
+                Modal.dirtCheckClose();
+                Element.CheckIfBreakBetweenForm();
+                Wait.UntilLoading();
+            }
+            catch (Exception)
+            {
+            }
         }
         #endregion
 

@@ -61,6 +61,8 @@ namespace SeleniumExtension.Driver
                 chromeOptions.AddUserProfilePreference("disable-popup-blocking", "true");
                 chromeOptions.AddUserProfilePreference("Proxy", "");
                 SDriver.Browser = new ChromeDriver(chromeOptions);
+                SDriver.Browser.Manage().Timeouts().SetPageLoadTimeout(TimeSpan.FromMinutes(2));
+                SDriver.Browser.Manage().Timeouts().SetScriptTimeout(TimeSpan.FromMinutes(2));
                 break;
             default:
                 break;

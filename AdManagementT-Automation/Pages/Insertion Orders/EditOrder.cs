@@ -179,14 +179,20 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
                     Element.MoveTo(AdGroup);
                     AdGroup.FindElement(By.CssSelector("button[data-ng-click='deleteGroup(adgroup)']")).Click();
                     IList<string> result = Wait.UntilToastMessageShow();
-
+                    if (result.Any(e=>e=="Delete error")) {
+                        throw new Exception("Unable to Delete old Group");
+                    }
 
                 }
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                if (ex.Message == "Unable to Delete old Group") {
+                    throw new Exception("Unable to Delete old Group");
+                }
                 return false;
+
             }
         }
 
@@ -229,6 +235,7 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
         public bool CreateNewAddGroup(AdGroupModel data)
         {
             //this.OpenAdGroupPanel();
+            Element.ScrolToTop();
             CreateAddGroupBtn.Click();
             Wait.UntilDisply(AdGroupForm_AdTypeDD);
             this.FillAddGroupData(data);
@@ -252,8 +259,10 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
 
                 AdGroupForm_CancelBtn.Click();
                 Wait.Second(1);
+                Modal.DirtyclickYes();
+                Wait.MLSeconds(100);
                 Logger.Log(LogingType.TextCaseFail, "Ad Group Save Failed - " + Result.ToString());
-                throw new Exception(Result.ToString());
+                throw new Exception(String.Join(",",Result.ToArray()));
             }
         }
 
@@ -336,11 +345,12 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
 
         public void AddNewOrderLine(string lineType)
         {
+            Wait.UntilClickAble(AddOrderLineBtn);
+            Wait.Second(1);
+            Wait.UntilLoading();
             Element.ScrolToTop();
             Element.ScrolTo(AddOrderLineBtn);
             Wait.MLSeconds(500);
-            Wait.UntilClickAble(AddOrderLineBtn);
-            Wait.Second(1);
             AddOrderLineBtn.Click();
             Wait.MLSeconds(500);
             if (lineType == "PFP")
@@ -395,6 +405,7 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
         }
         public bool DeleteRow(IWebElement Row)
         {
+            Wait.UntilLoading();
             Row.FindElement(By.LinkText("Delete")).Click();
             Modal.CommonclickYes();
             // Wait.UntilLoading();

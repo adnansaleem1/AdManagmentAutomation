@@ -262,5 +262,23 @@ namespace SeleniumExtension.Controls
             
             }
         }
+
+        public static void CheckIfBreakBetweenForm()
+        {
+            var WebElement=Element.FindByTagAndText("button", "Cancel");
+            if (WebElement != null) {
+                Element.ScrolTo(WebElement);
+                Wait.MLSeconds(200);
+                WebElement.Click();
+                Wait.MLSeconds(800);
+                Modal.dirtCheckClose();
+            }
+        }
+
+        private static IWebElement FindByTagAndText(string tagName, string Text)
+        {
+            IWebDriver driver = SDriver.Browser;
+            return driver.FindElements(By.TagName(tagName)).FirstOrDefault(e => e.Text.ToLower() == Text.ToLower());
+        }
     }
 }

@@ -23,7 +23,7 @@ namespace SeleniumExtension.Utilties
             int TimeToCalculate = 0;
             int loopWaitTime = 1;
             IWebDriver driver = SDriver.Browser;
-            while (Element.Dispaly(By.ClassName("blockOverlay")) || Element.Dispaly(By.ClassName("block-ui-overlay")))
+            while (Element.Dispaly(By.ClassName("blockOverlay")) || Element.Dispaly(By.ClassName("block-ui-overlay"))|| Element.Dispaly(By.ClassName("block-ui-visible")))
             {
                 // driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(Config.LoopTimeOutToCheckElement));
                 Thread.Sleep(loopWaitTime * 1000);
@@ -174,8 +174,17 @@ namespace SeleniumExtension.Utilties
         public static IList<string> UntilToastMessageShow()
         {
             IList<string> msg=new List<string>();
-            Wait.InstantUntilDisply(By.ClassName("toast-message"));
+            var MaxWaitSecond = 400;
+            try
+            {
+                Wait.InstantUntilDisply(By.ClassName("toast-message"), MaxWaitSecond);
+            }
+            catch (Exception)
+            {
+                throw new Exception(String.Format("No Toast message show after Seconds {0}", MaxWaitSecond));
+            }
             IWebDriver driver = SDriver.Browser;
+            Wait.MLSeconds(200);
             IReadOnlyList<IWebElement> ToastEle=driver.FindElements(By.ClassName("toast-message"));
             foreach (var item in ToastEle)
             {
@@ -207,6 +216,27 @@ namespace SeleniumExtension.Utilties
                 }
             }
             Wait.UntilHide(By.ClassName("toast-message"));
+        }
+        private static void InstantUntilDisply(By by,int MaxSec)
+        {
+            int MaxWaitedSec = MaxSec;
+            int TimeToCalculate = 0;
+            int loopWaitTime = 0;
+            IWebDriver driver = SDriver.Browser;
+            var starter = DateTime.Now;
+            while (!Element.Dispaly(by))
+            {
+                // driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(Config.LoopTimeOutToCheckElement));
+                var Diff = DateTime.Now - starter;
+
+                Thread.Sleep(loopWaitTime * 500);
+                TimeToCalculate += loopWaitTime;
+                if (MaxWaitedSec <= Diff.TotalSeconds)
+                {
+                   // break;
+                    throw new Exception("Max Wait Reached for Element Search Wait");
+                }
+            }
         }
         private static void InstantUntilDisply(By by)
         {
@@ -260,10 +290,14 @@ namespace SeleniumExtension.Utilties
         internal static void WaitForOption(string option,IWebElement Ele)
         {
             IWebDriver driver = SDriver.Browser;
-
+            var starter = DateTime.Now;
+            var MaxWaitedSec = 120;
             try
             {
-                while (!Ele.FindElements(By.TagName("option")).Any(e => e.Text.ToLower() == option.ToLower())) ;
+                while (MaxWaitedSec >= (DateTime.Now - starter ).TotalSeconds && !Ele.FindElements(By.TagName("option")).Any(e => e.Text.ToLower() == option.ToLower())) ;
+                if (MaxWaitedSec <= (DateTime.Now - starter).TotalSeconds) {
+                    throw new Exception(String.Format("{1} : option did't appear in Dropdown", option));
+                }
             }
             catch (Exception ex)
             {

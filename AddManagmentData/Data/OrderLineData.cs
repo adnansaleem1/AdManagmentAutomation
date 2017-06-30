@@ -177,9 +177,9 @@ namespace AddManagmentData.Data
                     ProductGroup = "ESP",
                     AddType = "PFP",
                     Position = 1,
-                    SearchTerm = "BAGS/BEACH BAGS",
+                    SearchTerm = "ANTIMICROBIAL ENHANCED PRODUCTS",
                     DeliveryPreferences = "Buy Out",
-                    ProductInformation = "BAGS/BEACH BAGS",
+                    ProductInformation = "ANTIMICROBIAL ENHANCED PRODUCTS",
                     // Impressions = 20,
                     GeoTargetEnable = false,
                     KeyWordsEnable = true,
@@ -269,7 +269,7 @@ namespace AddManagmentData.Data
                     DisplayMultipleAddsAllow = true,
                     SearchLeadingTextAllow = true,
                     ProductSelectionManual = true,
-                    ProductId_ManualSelection = new List<string>() { "5625470", "550168664", "5848093" },
+                    ProductId_ManualSelection = new List<string>() { "550171922", "550171892", "550124672" },
                     Priority = 10,
                     Status = "Active"
                 };
@@ -360,5 +360,8 @@ namespace AddManagmentData.Data
                 };
             }
         }
+
+        public static string ParmanentActiveOrderId = "75107";
+        public static string ParmanentActiveProductId = "550508249";
     }
 }

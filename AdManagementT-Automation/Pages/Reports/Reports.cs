@@ -171,6 +171,8 @@ namespace AdManagementT_Automation.Pages.Reports
             Wait.MLSeconds(100);
             RunReportBtn.Click();
             Wait.AM_Loaging_ShowAndHide();
+            Wait.Second(1);
+            Wait.UntilLoading();
             this.verifyGridResult();
             return this;
         }

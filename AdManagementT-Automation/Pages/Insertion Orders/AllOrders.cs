@@ -51,7 +51,7 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
         }
         public AllOrdersPage SelectGivenOrderByID(string id)
         {
-            var Order = this.SearchOrder(id);
+            var Order = this.ClearFilter().SearchOrder(id);
             if (Order == null)
             {
                 throw new Exception("No Order Find With given Id.");
@@ -199,7 +199,8 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
                 {
                     item.Clear();
                 }
-                Wait.AM_Loaging_ShowAndHide();
+                Wait.MLSeconds(200);
+                Wait.UntilLoading();
             }
             catch (Exception)
             {

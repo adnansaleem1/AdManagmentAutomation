@@ -128,7 +128,14 @@ namespace AdManagementT_Automation.Pages.Inventory
             SearchBtn.Click();
             Wait.UntilLoading(TableRecords);
             Wait.Second(1);
-            TermsModal.FindElements(By.CssSelector("tr[data-ng-repeat='inventory in $data']"))[0].FindElement(By.TagName("input")).Click();
+            if (!TermsModal.FindElements(By.CssSelector("tr[data-ng-repeat='inventory in $data']"))[0].FindElement(By.TagName("input")).Enabled)
+            {
+                Modal.Close();
+                throw new Exception(String.Format("Inventory is not available on given search Terms = {0}",Data.SearchTerms[0]));
+            }else{
+                TermsModal.FindElements(By.CssSelector("tr[data-ng-repeat='inventory in $data']"))[0].FindElement(By.TagName("input")).Click();
+            
+            }
             Wait.MLSeconds(100);
             AdToProposalBtn.Click();
         }

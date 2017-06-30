@@ -146,13 +146,21 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
         #endregion
 
 
-        public EditOrderLinePage FillOrderLine_Admin(OrderLineModel OrderLineData)
+        public EditOrderLinePage  FillOrderLine_Admin(OrderLineModel OrderLineData)
         {
-            Wait.UntilDisply(PositionDD);
+            Wait.UntilDisply(PositionDD); 
+            if (!string.IsNullOrEmpty(OrderLineData.AddGroupName))
+            {
+                Select.ByText(ProductGroupDD, "ESP Mobile");
+                Wait.MLSeconds(200);
+                Select.ByText(AddTypeDD, "PFP");
+                Wait.MLSeconds(1000);
+            }
             Select.ByText(ProductGroupDD, OrderLineData.ProductGroup);
             Wait.MLSeconds(200);
             Select.ByText(AddTypeDD, OrderLineData.AddType);
             Wait.MLSeconds(1000);
+
             if (OrderLineData.Position != null && OrderLineData.Position != 0)
             {
                 Select.ByText(PositionDD, OrderLineData.Position.ToString());
@@ -243,7 +251,19 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
             }
             if (!string.IsNullOrEmpty(OrderLineData.AddGroupName))
             {
-                Select.ByText(groupNameDD, OrderLineData.AddGroupName);
+                try
+                {
+                    Select.ByText(groupNameDD, OrderLineData.AddGroupName);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Log(LogingType.TextCaseFail, ex.ToString());
+                    this.CloseBtn.Click();
+                    Wait.MLSeconds(500);
+                    Modal.DirtyclickYes();
+                    Wait.MLSeconds(100);
+                    throw new Exception(ex.Message);
+                }
             }
             if (OrderLineData.ProductSelectionManual == false && OrderLineData.ProductSelectionManual != null)
             {
@@ -405,7 +425,7 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
             Wait.MLSeconds(200);
             ProductSearchBtn.Click();
             By DispledElement = Wait.UntilDisply(new List<By>() { By.ClassName("toast-message"), By.ClassName("product-results") });
-            Wait.MLSeconds(200);
+            Wait.MLSeconds(500);
             if (DispledElement.ToString() == "By.ClassName[Contains]: product-results")
             {
                 IList<IWebElement> pList = ProductsearchResult.FindElements(By.CssSelector("div[ng-click='addProductSelection(product)']"));
@@ -452,14 +472,62 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
         }
         public EditOrderLinePage Save()
         {
-            Element.ScrolTo(OrderLineSaveBtn);
+            
             Wait.MLSeconds(200);
             Wait.UntilClickAble(OrderLineSaveBtn);
+            Wait.MLSeconds(200);
+            Wait.UntilLoading();
+            Wait.MLSeconds(800);
+            Element.ScrolTo(OrderLineSaveBtn);
             OrderLineSaveBtn.Click();
             this.verfiySave();
             return this;
         }
+        //private void verfiySaveWithException()
+        //{
+        //    IList<string> result = Wait.UntilToastMessageShow();
 
+        //    if (result.Any(e => e == "Saved successfully" || e == "Saved and added successfully" || e == "Saved and copied successfully"))
+        //    {
+        //        Logger.Log(LogingType.TestCasePass, "Product Save Successfully");
+
+        //    }
+        //    else if (result.Any(e => e == "Updated successfully"))
+        //    {
+
+        //        Logger.Log(LogingType.TestCasePass, "Product Updated Successfully");
+
+        //    }
+        //    else if (result.Any(e => e == "Save error" || e == "Cannot save orderline as Active or Ordered because Order is Completed." || e.Contains("Another supplier has Standard ad beginning") || e.Contains("Another supplier has Standard ad beginning")))
+        //    {
+        //        this.CloseBtn.Click();
+        //        Wait.MLSeconds(500);
+        //        Modal.DirtyclickYes();
+        //        Logger.Log(LogingType.TextCaseFail, result.ToString());
+        //        throw new Exception(String.Join(",",result.ToArray()));
+
+        //    }
+        //    else if (result.Any(e => e.Contains("End Date is set to today for Completed status") || e.Contains("Product is not relevant to the ad") || e.Contains("Remaining inventory not available for this search term")))
+        //    {
+        //        //  Logger.Log(LogingType.TextCaseFail, result[0]);
+        //        //  throw new Exception(result.ToString());
+        //        this.verfiySave();
+        //    }
+        //    else if (result.Count == 0)
+        //    {
+        //        this.Save();
+        //        //this.verfiySave(true);
+
+        //    }
+        //    else
+        //    {
+        //        Logger.Log(LogingType.TextCaseFail, result.ToString());
+        //        throw new Exception(result.ToString());
+        //        this.CloseBtn.Click();
+        //        Wait.MLSeconds(500);
+        //        Modal.DirtyclickYes();
+        //    }
+        //}
         private void verfiySave()
         {
             IList<string> result = Wait.UntilToastMessageShow();
@@ -475,13 +543,14 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
                 Logger.Log(LogingType.TestCasePass, "Product Updated Successfully");
 
             }
-            else if (result.Any(e => e == "Save error"))
+            else if (result.Any(e => e == "Save error" || e == "Cannot save orderline as Active or Ordered because Order is Completed." || e.Contains("Another supplier has Standard ad beginning") || e.Contains("Another supplier has Standard ad beginning")))
             {
                 Logger.Log(LogingType.TextCaseFail, result.ToString());
-                //throw new Exception(result.ToString());
                 this.CloseBtn.Click();
                 Wait.MLSeconds(500);
                 Modal.DirtyclickYes();
+                Wait.MLSeconds(100);
+                throw new Exception(String.Join(",", result.ToArray()));
             }
             else if (result.Any(e => e.Contains("End Date is set to today for Completed status") || e.Contains("Product is not relevant to the ad") || e.Contains("Remaining inventory not available for this search term")))
             {
@@ -489,18 +558,15 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
                 //  throw new Exception(result.ToString());
                 this.verfiySave();
             }
-            else if (result.Count == 0) {
-                this.Save();
-                //this.verfiySave(true);
-            
-            }
             else
             {
                 Logger.Log(LogingType.TextCaseFail, result.ToString());
-                throw new Exception(result.ToString());
+                Wait.UntilLoading();
+                Element.ScrolTo(this.CloseBtn);
                 this.CloseBtn.Click();
                 Wait.MLSeconds(500);
                 Modal.DirtyclickYes();
+                throw new Exception(String.Join(",", result.ToArray()));
             }
         }
         internal EditOrderLinePage VerifySaveAndCopy()
@@ -523,6 +589,8 @@ namespace AdManagementT_Automation.Pages.Insertion_Orders
         }
         internal void GoBackOrder()
         {
+            Wait.MLSeconds(500);
+            Wait.UntilLoading();
             PagesRepo.AddTabs.Switch(AM_Sub_Insertion_Orders.Edit_Order);
         }
 

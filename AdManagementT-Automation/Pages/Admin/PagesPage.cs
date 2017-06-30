@@ -144,7 +144,7 @@ namespace AdManagementT_Automation.Pages.Admin
                 CatInput.SendKeys(pageModel.Category); 
             }
             Wait.AM_Loaging_ShowAndHide();
-
+            Wait.MLSeconds(300);
             return this;
         }
 

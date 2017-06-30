@@ -3,8 +3,10 @@ using AdManagementT_Automation.Base;
 using AdManagementT_Automation.Pages;
 using NUnit.Framework;
 using OpenQA.Selenium;
+using SeleniumExtension.Controls;
 using SeleniumExtension.Driver;
 using SeleniumExtension.Ref;
+using SeleniumExtension.Utilties;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -185,6 +187,7 @@ namespace AdManagementT_Automation
             this.LogInToAddManagement();
             var ProposalPage = PagesRepo.CreatePropsal;
             var Data = InventoryData.CreateProposal;
+            Data.SearchTerms = new List<string>() { "MUGS & STEINS/Mugs & Steins-Ceramic" };
             Data.ProductGroup = "ESP Mobile";
             ProposalPage.Navigate()
                 .CreateProposal(Data);
@@ -196,7 +199,7 @@ namespace AdManagementT_Automation
             this.LogInToAddManagement();
             var ProposalPage = PagesRepo.CreatePropsal;
             var Data = InventoryData.CreateProposal;
-            Data.SearchTerms[0] = "BACKPACKS";
+            Data.SearchTerms[0] = "MUGS & STEINS";
             Data.InventoryType = "Banners";
             Data.ProductGroup = "ESP Mobile";
             Data.AdType = "Banner";
@@ -391,16 +394,16 @@ namespace AdManagementT_Automation
             editOrder.DeleteNote(data);
             editOrder.CreateNewNote(data);
         }
-        [Test, Order(28)]
-        public void ExportToPDF()
-        {
-            this.LogInToAddManagement();
-            var AllOrders = PagesRepo.AllOrders;
-            var editOrder = PagesRepo.EditOrder;
-            AllOrders.Navigate()
-            .SelectGivenOrderByID(OrderLineData.OrderId);
-            editOrder.ExportToPDF();
-        }
+        //[Test, Order(28)]
+        //public void ExportToPDF()
+        //{
+        //    this.LogInToAddManagement();
+        //    var AllOrders = PagesRepo.AllOrders;
+        //    var editOrder = PagesRepo.EditOrder;
+        //    AllOrders.Navigate()
+        //    .SelectGivenOrderByID(OrderLineData.OrderId);
+        //    editOrder.ExportToPDF();
+        //}
         #endregion
         #region Order Line Tests
         [Test, Order(29)]
@@ -520,7 +523,7 @@ namespace AdManagementT_Automation
             var Data = OrderLineData.ResultTower;
             Data.DeliveryPreferences = "Standard";
             AllOrders.Navigate()
-            .SelectGivenOrderByID(OrderLineData.OrderId);
+            .SelectGivenOrderByID(OrderLineData.ParmanentActiveOrderId);
             EditOrder.DeleteResultBannerIfAlreadyExists(Data);
             PagesRepo.EditOrder.AddNewOrderLine("Banner");
             PagesRepo.EditOrderLine.
@@ -623,7 +626,26 @@ namespace AdManagementT_Automation
         [TearDown]
         public void TearDownAfterEveryTest()
         {
+            try
+            {
 
+                Wait.UntilLoading();
+                Modal.Close();
+                try
+                {
+                    Modal.DirtyclickYes();
+                }
+                catch (Exception)
+                {
+                }
+                Wait.UntilLoading();
+                Modal.dirtCheckClose();
+                Element.CheckIfBreakBetweenForm();
+                Wait.UntilLoading();
+            }
+            catch (Exception)
+            {
+            }
         }
         #endregion
 

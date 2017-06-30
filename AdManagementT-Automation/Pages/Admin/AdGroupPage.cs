@@ -51,7 +51,8 @@ namespace AdManagementT_Automation.Pages.Admin
         }
         public AdGroupPage Export() {
             Wait.MLSeconds(300);
-            Wait.UntilDisply(ExportBtn);
+            Wait.UntilLoading();
+            Wait.UntilClickAble(ExportBtn);
             if (ExportBtn.Enabled)
             {
                 FileHandler.BerforeDownLoadNotification();
